@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1",
   "runnerVersion": "0.1.0",
-  "runId": "teammate-invite-2026-10-13T12-10-04-850Z-3c61d0b2",
+  "runId": "teammate-invite-2026-10-13T17-00-02-345Z-165c95fe",
   "specId": "teammate-invite",
   "revision": 1,
   "specDigest": "4e2fa2fa7ba06562acf264bc60cbb53dd657a4ce67464bc9784a34088b28a683",
@@ -12,8 +12,8 @@
     "Run npm run demo. Login is a synthetic local fixture. A controlled sender test API exposes the invitation link; email delivery is not verified."
   ],
   "status": "PASS",
-  "startedAt": "2026-10-13T12:10:04.851Z",
-  "durationMs": 3727,
+  "startedAt": "2026-10-13T17:00:02.345Z",
+  "durationMs": 1083,
   "steps": [
     {
       "id": "login",
@@ -33,8 +33,8 @@
       "observed": {
         "url": "http://127.0.0.1:4173/login"
       },
-      "durationMs": 2096,
-      "startedAt": "2026-10-13T12:10:04.980Z",
+      "durationMs": 243,
+      "startedAt": "2026-10-13T17:00:02.448Z",
       "attempts": 1,
       "screenshot": "001-login.png"
     },
@@ -58,8 +58,8 @@
         "type": "click"
       },
       "observed": "Clicked",
-      "durationMs": 34,
-      "startedAt": "2026-10-13T12:10:07.076Z",
+      "durationMs": 36,
+      "startedAt": "2026-10-13T17:00:02.691Z",
       "attempts": 1
     },
     {
@@ -85,8 +85,8 @@
       "observed": {
         "visible": true
       },
-      "durationMs": 102,
-      "startedAt": "2026-10-13T12:10:07.110Z",
+      "durationMs": 90,
+      "startedAt": "2026-10-13T17:00:02.727Z",
       "attempts": 1,
       "screenshot": "003-invite-page.png"
     },
@@ -110,8 +110,8 @@
         "value": "teammate@example.test"
       },
       "observed": "Input filled",
-      "durationMs": 13,
-      "startedAt": "2026-10-13T12:10:07.212Z",
+      "durationMs": 9,
+      "startedAt": "2026-10-13T17:00:02.817Z",
       "attempts": 1
     },
     {
@@ -134,8 +134,8 @@
         "type": "click"
       },
       "observed": "Clicked",
-      "durationMs": 49,
-      "startedAt": "2026-10-13T12:10:07.225Z",
+      "durationMs": 31,
+      "startedAt": "2026-10-13T17:00:02.826Z",
       "attempts": 1
     },
     {
@@ -160,8 +160,8 @@
       "observed": {
         "text": "Invitation created"
       },
-      "durationMs": 60,
-      "startedAt": "2026-10-13T12:10:07.274Z",
+      "durationMs": 61,
+      "startedAt": "2026-10-13T17:00:02.857Z",
       "attempts": 1,
       "screenshot": "006-created-ui.png"
     },
@@ -197,8 +197,8 @@
         "value": true,
         "captured": "invitationLink"
       },
-      "durationMs": 50,
-      "startedAt": "2026-10-13T12:10:07.334Z",
+      "durationMs": 40,
+      "startedAt": "2026-10-13T17:00:02.918Z",
       "attempts": 1,
       "screenshot": "007-created-api.png"
     },
@@ -229,8 +229,8 @@
         "path": "member",
         "value": false
       },
-      "durationMs": 147,
-      "startedAt": "2026-10-13T12:10:07.384Z",
+      "durationMs": 125,
+      "startedAt": "2026-10-13T17:00:02.958Z",
       "attempts": 1,
       "screenshot": "008-isolated.png"
     },
@@ -254,8 +254,8 @@
       "observed": {
         "url": "http://127.0.0.1:4173/accept?token=[REDACTED]"
       },
-      "durationMs": 104,
-      "startedAt": "2026-10-13T12:10:07.531Z",
+      "durationMs": 92,
+      "startedAt": "2026-10-13T17:00:03.083Z",
       "attempts": 1,
       "screenshot": "009-follow.png"
     },
@@ -279,8 +279,8 @@
         "type": "click"
       },
       "observed": "Clicked",
-      "durationMs": 36,
-      "startedAt": "2026-10-13T12:10:07.635Z",
+      "durationMs": 33,
+      "startedAt": "2026-10-13T17:00:03.175Z",
       "attempts": 1
     },
     {
@@ -306,8 +306,8 @@
       "observed": {
         "visible": true
       },
-      "durationMs": 130,
-      "startedAt": "2026-10-13T12:10:07.671Z",
+      "durationMs": 112,
+      "startedAt": "2026-10-13T17:00:03.208Z",
       "attempts": 1,
       "screenshot": "011-access.png"
     },
@@ -338,8 +338,8 @@
         "path": "member",
         "value": true
       },
-      "durationMs": 48,
-      "startedAt": "2026-10-13T12:10:07.801Z",
+      "durationMs": 50,
+      "startedAt": "2026-10-13T17:00:03.320Z",
       "attempts": 1,
       "screenshot": "012-membership.png"
     }

@@ -2,6 +2,8 @@
 
 ## 0.1.0 — unreleased
 
+- Contextual next-check guidance, real prerequisite links and safe local diagnostic/replay/trace tools in unsuccessful reports.
+
 - Actionable setup diagnostics with structured JSON, spec/policy authorization, explicit unchecked boundaries and consistent setup exits.
 - Task-based first-run guide and targeted diagnostic troubleshooting.
 

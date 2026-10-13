@@ -57,6 +57,8 @@ The second command exits `1`: the broken form displays “Success” but its API
 
 Open the printed `report.html` path in a browser. The report includes the actual workflow, expected/observed data and linked evidence. Copy the whole run folder when sharing it so screenshots and traces remain available.
 
+For an unsuccessful run, choose **View next steps** beside the verdict. Each nonpassing step has a **Next check**; blocked steps link to the prerequisite observation. **Commands and trace tools** provides local setup, replay and trace-viewer commands. These are investigation suggestions, not a diagnosed cause or permission to weaken the expected outcome. Run them in the same authorized test environment with restored test data and required variables.
+
 ```sh
 node dist/cli.js list --config examples/config.json
 node dist/cli.js report RUN_ID --config examples/config.json

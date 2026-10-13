@@ -11,6 +11,7 @@ src/browser.ts   fixed action/assertion adapters and read-only test API
 src/runner.ts    contexts, dependency execution and evidence persistence
 src/result.ts    status precedence and stable machine-readable types
 src/reporter.ts  escaped offline HTML from recorded results
+src/report-guidance.ts  pure next-check suggestions from recorded status/type/dependencies
 src/report-icons.ts  fixed inline SVG icon set
 src/report-styles.ts  loads the local report stylesheet for inline embedding
 assets/         report CSS, embedded Geist font and SIL font license
@@ -41,3 +42,5 @@ HTML and JSON share the same result. Website text is escaped; the report runs no
 Extension seams are source adapters, public verify()/renderReport() and schema-versioned JSON. No arbitrary runtime plugin execution or commercial-service dependency. See CONTRIBUTING.md.
 
 Doctor is separate from outcome verification. It validates supplied files, authorizes available spec URL references, checks credential/evidence constraints and environment-variable presence, probes uniquely named evidence-directory files, and launches/closes Chromium without app requests. It produces the same check records for terminal and JSON output. Missing/invalid inputs and policy incompatibility exit 2; environmental failures exit 3; input errors take precedence. READY applies only to the checks performed, and outcomesVerified is always false. Omitted specs and captured URLs are explicitly NOT_CHECKED. Diagnostic messages do not echo raw JSON, URL values or credential values; human fields receive redaction without altering protocol codes/statuses. Runtime policy enforcement and deterministic verdicts remain in the existing runner.
+
+Report guidance consumes only the recorded result and does not mutate it or infer an application root cause. Nonpassing steps get a next-check suggestion; unsuccessful runs get a linked Next steps section. Primary focus prioritizes recorded runtime observations, then ERROR/FAIL/NOT_VERIFIED steps. Zero-attempt blocked steps link only their nonpassing declared/default prerequisites; explicit independent steps remain independent and cleanup defaults reset at the phase boundary. Native disclosures expose setup/replay text and a local trace command only for a safe ZIP basename. Guidance never executes commands, contacts services, changes expectations or replaces verdict evidence. PASS reports omit failure prompts.

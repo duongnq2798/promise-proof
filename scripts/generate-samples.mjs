@@ -85,6 +85,12 @@ try {
             path: 'docs/report-preview.png',
             animations: 'disabled',
           });
+          await page.locator('#next-steps').scrollIntoViewIfNeeded();
+          await page.screenshot({
+            path: 'docs/report-next-steps.png',
+            animations: 'disabled',
+          });
+          await page.evaluate(() => scrollTo(0, 0));
           await page
             .getByRole('radio', { name: 'Light theme', exact: true })
             .check();
@@ -104,6 +110,11 @@ try {
           await page.locator('#evidence').scrollIntoViewIfNeeded();
           await page.screenshot({
             path: '.smoke/report-mobile-evidence.png',
+            animations: 'disabled',
+          });
+          await page.locator('#next-steps').scrollIntoViewIfNeeded();
+          await page.screenshot({
+            path: '.smoke/report-mobile-next-steps.png',
             animations: 'disabled',
           });
         } finally {

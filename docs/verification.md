@@ -32,9 +32,9 @@ Final genuine sample runs:
 
 | Example       | Run id                                            | Result        | Assertions                     |
 | ------------- | ------------------------------------------------- | ------------- | ------------------------------ |
-| Saved contact | saved-contact-2026-10-13T12-09-56-126Z-5cf6740d   | PASS / exit 0 | 4 PASS                         |
-| Lying form    | lying-form-2026-10-13T12-10-00-514Z-91268f6b      | FAIL / exit 1 | 1 PASS, 1 FAIL, 1 NOT_VERIFIED |
-| Invitation    | teammate-invite-2026-10-13T12-10-04-850Z-3c61d0b2 | PASS / exit 0 | 6 PASS                         |
+| Saved contact | saved-contact-2026-10-13T16-59-58-285Z-17a7d85f   | PASS / exit 0 | 4 PASS                         |
+| Lying form    | lying-form-2026-10-13T16-59-59-593Z-e4df82cf      | FAIL / exit 1 | 1 PASS, 1 FAIL, 1 NOT_VERIFIED |
+| Invitation    | teammate-invite-2026-10-13T17-00-02-345Z-165c95fe | PASS / exit 0 | 6 PASS                         |
 
 The original bundles remain under .promiseproof/runs. Portable copies are in docs/sample-report/passing, failing and invitation. The passing/failing bundles include context traces; invitation tracing is disabled because its API captures a link. All three include genuine screenshots.
 
@@ -55,3 +55,13 @@ Fresh agent-client auto-discovery, Claude Code/Cursor invocation, external-user 
 - `doctor-example.json` is output from the actual built doctor with the simple-form spec and example policy, formatted for readability; no verdict or check was fabricated.
 - A fresh packaged consumer at `.smoke/package-njcLPg` passed installed init, doctor JSON readiness with outcomesVerified false, documented ESM exports, agent export and all three real workflows with exits 0/1/0. The enhanced consumer check is included in the existing CI workflow through `scripts/package-smoke.mjs`.
 - The diagnostics implementation commit `3a4af81016443a33346ad43bb80d697efcaad88c` also passed all six Windows/Linux/macOS and Node 22/24 jobs in [run 38431931787](https://github.com/duongnq2798/promise-proof/actions/runs/38431931787), including the full suite and enhanced installed-doctor consumer check. No hosted user study is implied by this platform coverage.
+
+## Contextual report guidance follow-up — 2026-10-14
+
+- Fresh npm run check passed type checking, ESLint, formatting, **90 tests across 5 files** and production build on Windows. The final suite took 34.06 seconds. These results supersede the earlier local counts for this increment; prior CI runs above do not cover it.
+- Seven new Chromium report tests failed before implementation and passed afterward; the report suite now has 13 tests. They cover actual failure/dependency navigation, explicit independent steps, runtime and cleanup focus, missing-evidence suggestions, safe ZIP trace commands, unchanged result data, PASS omission, native keyboard disclosures and 320/390-pixel layouts.
+- A separate read-only reviewer found no Critical or Important issues. Its documentation finding was addressed in ARCHITECTURE.md. Additional probes inspected multiple dependencies, cleanup phase boundaries, explicit cross-phase dependencies, already-attempted NOT_VERIFIED steps, escaped labels and preserved input results.
+- The sample generator rebuilt the three genuine CLI bundles shown above, with exits 0/1/0. Desktop dark/light previews and the new desktop/mobile Next steps captures were visually inspected. `report-next-steps.png` is browser-rendered output from the failing bundle, not a mockup.
+- A fresh packed consumer at `.smoke/package-HsGCzu` passed installed init, doctor JSON readiness with outcomesVerified false, ESM exports, agent export and all three real browser workflows with exits 0/1/0. The consumer additionally checked that generated Next steps presence matches unsuccessful verdicts and is absent for PASS.
+- Guidance consists of recommended investigation steps derived from recorded observations. Neither tests nor review establish user time saved, an application root cause or external-user usability. Direct screen-reader testing and suggested trace-command execution in a user's environment remain unverified.
+- Platform CI for this increment will be recorded after its implementation commit is pushed and the run completes.

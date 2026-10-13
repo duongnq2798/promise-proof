@@ -135,6 +135,10 @@ try {
     );
     if (!html.includes('<title>' + result.status))
       throw new Error('HTML/JSON verdict mismatch');
+    if ((result.status !== 'PASS') !== html.includes('id="next-steps"'))
+      throw new Error(
+        'Packaged report guidance did not match the recorded verdict',
+      );
     console.log(
       'Packaged ' + name + ': ' + result.status + ' (exit ' + code + ')',
     );

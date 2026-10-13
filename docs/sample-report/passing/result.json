@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1",
   "runnerVersion": "0.1.0",
-  "runId": "saved-contact-2026-10-13T12-09-56-126Z-5cf6740d",
+  "runId": "saved-contact-2026-10-13T16-59-58-285Z-17a7d85f",
   "specId": "saved-contact",
   "revision": 2,
   "specDigest": "95acfc963622cded263edbaa627b44402526cbed4e47c66dab404ee329f7735c",
@@ -12,8 +12,8 @@
     "Run npm run demo. Contact records are isolated by a synthetic fixture session and live in memory until restart. Revision 2 adds an absence precondition to prevent stale-record evidence."
   ],
   "status": "PASS",
-  "startedAt": "2026-10-13T12:09:56.127Z",
-  "durationMs": 3670,
+  "startedAt": "2026-10-13T16:59:58.285Z",
+  "durationMs": 757,
   "steps": [
     {
       "id": "open",
@@ -33,8 +33,8 @@
       "observed": {
         "url": "http://127.0.0.1:4173/form"
       },
-      "durationMs": 1312,
-      "startedAt": "2026-10-13T12:09:56.537Z",
+      "durationMs": 223,
+      "startedAt": "2026-10-13T16:59:58.361Z",
       "attempts": 1,
       "screenshot": "001-open.png"
     },
@@ -65,8 +65,8 @@
         "path": "record",
         "value": null
       },
-      "durationMs": 57,
-      "startedAt": "2026-10-13T12:09:57.849Z",
+      "durationMs": 50,
+      "startedAt": "2026-10-13T16:59:58.585Z",
       "attempts": 1,
       "screenshot": "002-absent.png"
     },
@@ -90,8 +90,8 @@
         "value": "Ada Example"
       },
       "observed": "Input filled",
-      "durationMs": 27,
-      "startedAt": "2026-10-13T12:09:57.906Z",
+      "durationMs": 18,
+      "startedAt": "2026-10-13T16:59:58.635Z",
       "attempts": 1
     },
     {
@@ -114,8 +114,8 @@
         "value": "ada@example.test"
       },
       "observed": "Input filled",
-      "durationMs": 17,
-      "startedAt": "2026-10-13T12:09:57.933Z",
+      "durationMs": 11,
+      "startedAt": "2026-10-13T16:59:58.653Z",
       "attempts": 1
     },
     {
@@ -138,8 +138,8 @@
         "type": "click"
       },
       "observed": "Clicked",
-      "durationMs": 66,
-      "startedAt": "2026-10-13T12:09:57.950Z",
+      "durationMs": 49,
+      "startedAt": "2026-10-13T16:59:58.664Z",
       "attempts": 1
     },
     {
@@ -164,8 +164,8 @@
       "observed": {
         "text": "Success"
       },
-      "durationMs": 83,
-      "startedAt": "2026-10-13T12:09:58.016Z",
+      "durationMs": 56,
+      "startedAt": "2026-10-13T16:59:58.713Z",
       "attempts": 1,
       "screenshot": "006-ui.png"
     },
@@ -187,8 +187,8 @@
       "observed": {
         "url": "http://127.0.0.1:4173/form"
       },
-      "durationMs": 144,
-      "startedAt": "2026-10-13T12:09:58.099Z",
+      "durationMs": 100,
+      "startedAt": "2026-10-13T16:59:58.769Z",
       "attempts": 1,
       "screenshot": "007-reload.png"
     },
@@ -225,8 +225,8 @@
           "email": "ada@example.test"
         }
       },
-      "durationMs": 51,
-      "startedAt": "2026-10-13T12:09:58.243Z",
+      "durationMs": 52,
+      "startedAt": "2026-10-13T16:59:58.869Z",
       "attempts": 1,
       "screenshot": "008-persisted.png"
     },
@@ -247,8 +247,8 @@
       "observed": {
         "errors": []
       },
-      "durationMs": 53,
-      "startedAt": "2026-10-13T12:09:58.294Z",
+      "durationMs": 35,
+      "startedAt": "2026-10-13T16:59:58.921Z",
       "attempts": 1,
       "screenshot": "009-errors.png"
     }

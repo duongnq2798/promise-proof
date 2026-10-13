@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1",
   "runnerVersion": "0.1.0",
-  "runId": "lying-form-2026-10-13T12-10-00-514Z-91268f6b",
+  "runId": "lying-form-2026-10-13T16-59-59-593Z-e4df82cf",
   "specId": "lying-form",
   "revision": 1,
   "specDigest": "14cd81ae422bd545e7132d65a5191a738319f38eba030d258f093fe9546e6066",
@@ -12,8 +12,8 @@
     "Run npm run demo. The /broken handler deliberately omits persistence. This email is distinct from the passing fixture."
   ],
   "status": "FAIL",
-  "startedAt": "2026-10-13T12:10:00.519Z",
-  "durationMs": 1798,
+  "startedAt": "2026-10-13T16:59:59.594Z",
+  "durationMs": 653,
   "steps": [
     {
       "id": "open",
@@ -33,8 +33,8 @@
       "observed": {
         "url": "http://127.0.0.1:4173/broken"
       },
-      "durationMs": 828,
-      "startedAt": "2026-10-13T12:10:00.602Z",
+      "durationMs": 263,
+      "startedAt": "2026-10-13T16:59:59.680Z",
       "attempts": 1,
       "screenshot": "001-open.png"
     },
@@ -58,8 +58,8 @@
         "value": "Grace Example"
       },
       "observed": "Input filled",
-      "durationMs": 24,
-      "startedAt": "2026-10-13T12:10:01.430Z",
+      "durationMs": 17,
+      "startedAt": "2026-10-13T16:59:59.943Z",
       "attempts": 1
     },
     {
@@ -82,8 +82,8 @@
         "value": "grace@example.test"
       },
       "observed": "Input filled",
-      "durationMs": 24,
-      "startedAt": "2026-10-13T12:10:01.454Z",
+      "durationMs": 14,
+      "startedAt": "2026-10-13T16:59:59.960Z",
       "attempts": 1
     },
     {
@@ -106,8 +106,8 @@
         "type": "click"
       },
       "observed": "Clicked",
-      "durationMs": 62,
-      "startedAt": "2026-10-13T12:10:01.478Z",
+      "durationMs": 63,
+      "startedAt": "2026-10-13T16:59:59.974Z",
       "attempts": 1
     },
     {
@@ -132,8 +132,8 @@
       "observed": {
         "text": "Success"
       },
-      "durationMs": 83,
-      "startedAt": "2026-10-13T12:10:01.540Z",
+      "durationMs": 71,
+      "startedAt": "2026-10-13T17:00:00.037Z",
       "attempts": 1,
       "screenshot": "005-ui.png"
     },
@@ -159,8 +159,8 @@
         "type": "api"
       },
       "observed": "API field record.email: expected \"grace@example.test\"; observed missing.",
-      "durationMs": 75,
-      "startedAt": "2026-10-13T12:10:01.623Z",
+      "durationMs": 47,
+      "startedAt": "2026-10-13T17:00:00.108Z",
       "attempts": 1,
       "screenshot": "006-persisted.png"
     },
@@ -187,7 +187,7 @@
       },
       "observed": "Dependencies did not pass: persisted",
       "durationMs": 0,
-      "startedAt": "2026-10-13T12:10:01.698Z",
+      "startedAt": "2026-10-13T17:00:00.155Z",
       "attempts": 0
     }
   ],

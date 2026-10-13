@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { runGuidance, stepGuidance } from './report-guidance.js';
 import type { RunResult, Status, StepResult } from './result.js';
 import { icon, type ReportIcon } from './report-icons.js';
 import { reportStyles } from './report-styles.js';
@@ -147,7 +148,11 @@ function observedText(step: StepResult): string {
     return 'No browser errors observed.';
   return JSON.stringify(step.observed) ?? 'No observation recorded.';
 }
-function renderStep(step: StepResult, index: number): string {
+function renderStep(
+  step: StepResult,
+  index: number,
+  result: RunResult,
+): string {
   const screenshot = artifact(step.screenshot);
   const expanded = step.status === 'FAIL' || step.status === 'ERROR';
   return (
@@ -189,6 +194,7 @@ function renderStep(step: StepResult, index: number): string {
     '</p></div><div><span class="observation-label">Observed</span><p>' +
     e(observedText(step)) +
     '</p></div></div>' +
+    renderStepGuidance(result, index) +
     '<details class="technical"><summary>' +
     icon('chevron') +
     'Technical details</summary><div class="technical-grid"><div><div class="eyebrow">Executed specification</div><pre>' +
@@ -212,6 +218,80 @@ function renderStep(step: StepResult, index: number): string {
         '</a></div>'
       : '') +
     '</div></details>'
+  );
+}
+function renderStepGuidance(result: RunResult, index: number): string {
+  const guide = stepGuidance(result, index);
+  if (!guide) return '';
+  return (
+    '<div class="step-guidance"><h4>Next check · ' +
+    e(guide.title) +
+    '</h4><p>' +
+    e(guide.check) +
+    '</p>' +
+    guide.dependencies
+      .map(
+        (dependency) =>
+          '<a class="text-link" href="#step-' +
+          e(dependency.id) +
+          '">Inspect prerequisite: ' +
+          e(dependency.description) +
+          ' ' +
+          icon('arrow') +
+          '</a>',
+      )
+      .join('') +
+    (guide.runtime
+      ? '<a class="text-link" href="#runtime-observations">Review runtime observations ' +
+        icon('arrow') +
+        '</a>'
+      : '') +
+    '</div>'
+  );
+}
+
+function renderNextSteps(result: RunResult): string {
+  const guide = runGuidance(result);
+  if (!guide) return '';
+  const href = guide.runtime
+    ? '#runtime-observations'
+    : guide.focus
+      ? '#step-' + e(guide.focus.id)
+      : '#run-details';
+  const focusLabel = guide.runtime
+    ? 'Runtime observations'
+    : guide.focus
+      ? guide.focus.description
+      : 'Run details';
+  const trace = result.traces.find(
+    (name) => artifact(name) && name.endsWith('.zip'),
+  );
+  return (
+    '<section class="next-steps" id="next-steps" aria-labelledby="next-steps-title"><div class="section-header"><h2 id="next-steps-title">Next steps</h2><span class="hint">Recommended checks</span></div><div class="guide-panel"><ol class="guide-actions">' +
+    '<li><span class="guide-number">1</span><div><h3>Inspect the observation</h3><p>Start with the recorded evidence for this run.</p><a class="guide-focus-link text-link" href="' +
+    href +
+    '">' +
+    e(focusLabel) +
+    ' ' +
+    icon('arrow') +
+    '</a></div></li>' +
+    '<li><span class="guide-number">2</span><div><h3>' +
+    e(guide.title) +
+    '</h3><p>' +
+    e(guide.check) +
+    '</p></div></li>' +
+    '<li><span class="guide-number">3</span><div><h3>Recheck the original outcome</h3><p>Restore test data and required environment variables, then rerun the recorded specification. A changed requirement needs a new source revision.</p></div></li></ol>' +
+    '<details class="guide-tools"><summary>' +
+    icon('terminal') +
+    'Commands and trace tools ' +
+    icon('chevron') +
+    '</summary><div class="guide-tool-content"><p>Run from the evidence bundle with PromiseProof installed. Replace &lt;policy.json&gt; with the policy path for the same authorized test environment.</p><span class="observation-label">Check setup</span><pre>promiseproof doctor --spec spec.json --config &lt;policy.json&gt;</pre><span class="observation-label">Verify the original specification</span><pre>promiseproof verify spec.json --config &lt;policy.json&gt;</pre>' +
+    (trace
+      ? '<span class="observation-label">Inspect the saved trace locally</span><pre>npm exec --offline -- playwright show-trace ' +
+        e(trace) +
+        '</pre><p>Use a project with Playwright installed; keep the ZIP with this bundle.</p>'
+      : '') +
+    '</div></details><p class="guide-note">These are investigation steps. The recorded failure does not establish a root cause or justify weaker expectations.</p></div></section>'
   );
 }
 function renderEvidence(result: RunResult): string {
@@ -451,7 +531,7 @@ export function renderReport(result: RunResult): string {
           result.summary.NOT_VERIFIED +
           ' not verified. Review the observations below.';
   const runtimeErrors = result.errors.length
-    ? '<div class="runtime-errors"><div class="eyebrow">Runtime observations</div>' +
+    ? '<div class="runtime-errors" id="runtime-observations"><div class="eyebrow">Runtime observations</div>' +
       result.errors.map((error) => '<p>' + e(error) + '</p>').join('') +
       '</div>'
     : '';
@@ -494,7 +574,13 @@ export function renderReport(result: RunResult): string {
     badge(result.status) +
     '</div><p class="verdict-copy">' +
     e(verdictCopy) +
-    '</p></div><div class="verdict-meta"><span>' +
+    '</p>' +
+    (result.status !== 'PASS'
+      ? '<a class="verdict-guide-link text-link" href="#next-steps">View next steps ' +
+        icon('arrow') +
+        '</a>'
+      : '') +
+    '</div><div class="verdict-meta"><span>' +
     icon('clock') +
     duration(result.durationMs) +
     '</span><span class="revision-meta">' +
@@ -505,10 +591,13 @@ export function renderReport(result: RunResult): string {
     '<div class="review-grid"><section id="workflow"><div class="section-header"><h2>Workflow<span class="count">' +
     result.steps.length +
     ' steps</span></h2><span class="hint">Expand to inspect</span></div><div class="workflow-list">' +
-    result.steps.map(renderStep).join('') +
+    result.steps
+      .map((step, index) => renderStep(step, index, result))
+      .join('') +
     '</div></section>' +
     renderEvidence(result) +
     '</div>' +
+    renderNextSteps(result) +
     renderDetails(result) +
     '<footer class="footer"><p>These observations cover the declared assertions in this run. Evidence is local, unsigned and mutable; it is not exhaustive correctness or third-party attestation.</p><span class="version">PromiseProof ' +
     e(result.runnerVersion) +
