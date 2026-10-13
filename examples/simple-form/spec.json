@@ -1,0 +1,77 @@
+{
+  "$schema": "../../schema/spec.schema.json",
+  "schemaVersion": "1",
+  "id": "saved-contact",
+  "revision": 2,
+  "goal": "A submitted contact is saved and remains available after reload",
+  "baseUrl": "http://127.0.0.1:4173",
+  "preconditions": [
+    "Run npm run demo. Contact records are isolated by a synthetic fixture session and live in memory until restart. Revision 2 adds an absence precondition to prevent stale-record evidence."
+  ],
+  "evidence": { "screenshots": true, "trace": true },
+  "steps": [
+    {
+      "id": "open",
+      "type": "navigate",
+      "description": "Open the contact form",
+      "url": "/form"
+    },
+    {
+      "id": "absent",
+      "type": "api",
+      "description": "This isolated fixture begins without the expected contact",
+      "url": "/api/contacts?email=ada@example.test",
+      "status": 200,
+      "json": { "path": "record", "equals": null }
+    },
+    {
+      "id": "name",
+      "type": "fill",
+      "description": "Enter the synthetic name",
+      "locator": { "label": "Name" },
+      "value": "Ada Example"
+    },
+    {
+      "id": "email",
+      "type": "fill",
+      "description": "Enter the synthetic email",
+      "locator": { "label": "Email" },
+      "value": "ada@example.test"
+    },
+    {
+      "id": "submit",
+      "type": "click",
+      "description": "Save the contact",
+      "locator": { "role": "button", "name": "Save contact" }
+    },
+    {
+      "id": "ui",
+      "type": "text",
+      "description": "The UI confirms success",
+      "locator": { "role": "status" },
+      "equals": "Success"
+    },
+    {
+      "id": "reload",
+      "type": "navigate",
+      "description": "Reload the form before checking persistence",
+      "url": "/form"
+    },
+    {
+      "id": "persisted",
+      "type": "api",
+      "description": "The API confirms the submitted record independently",
+      "url": "/api/contacts?email=ada@example.test",
+      "status": 200,
+      "json": {
+        "path": "record",
+        "equals": { "name": "Ada Example", "email": "ada@example.test" }
+      }
+    },
+    {
+      "id": "errors",
+      "type": "noErrors",
+      "description": "No browser errors were observed"
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "schemaVersion": "1",
+  "runnerVersion": "0.1.0",
+  "runId": "lying-form-2026-10-13T12-10-00-514Z-91268f6b",
+  "specId": "lying-form",
+  "revision": 1,
+  "specDigest": "14cd81ae422bd545e7132d65a5191a738319f38eba030d258f093fe9546e6066",
+  "goal": "A successful form submission actually saves the contact",
+  "baseUrl": "http://127.0.0.1:4173",
+  "environment": "local test",
+  "preconditions": [
+    "Run npm run demo. The /broken handler deliberately omits persistence. This email is distinct from the passing fixture."
+  ],
+  "status": "FAIL",
+  "startedAt": "2026-10-13T12:10:00.519Z",
+  "durationMs": 1798,
+  "steps": [
+    {
+      "id": "open",
+      "type": "navigate",
+      "description": "Open the deliberately broken form",
+      "context": "default",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "open",
+        "description": "Open the deliberately broken form",
+        "context": "default",
+        "type": "navigate",
+        "url": "/broken"
+      },
+      "observed": {
+        "url": "http://127.0.0.1:4173/broken"
+      },
+      "durationMs": 828,
+      "startedAt": "2026-10-13T12:10:00.602Z",
+      "attempts": 1,
+      "screenshot": "001-open.png"
+    },
+    {
+      "id": "name",
+      "type": "fill",
+      "description": "Enter the synthetic name",
+      "context": "default",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "name",
+        "description": "Enter the synthetic name",
+        "context": "default",
+        "locator": {
+          "label": "Name",
+          "exact": true
+        },
+        "type": "fill",
+        "value": "Grace Example"
+      },
+      "observed": "Input filled",
+      "durationMs": 24,
+      "startedAt": "2026-10-13T12:10:01.430Z",
+      "attempts": 1
+    },
+    {
+      "id": "email",
+      "type": "fill",
+      "description": "Enter a distinct synthetic email",
+      "context": "default",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "email",
+        "description": "Enter a distinct synthetic email",
+        "context": "default",
+        "locator": {
+          "label": "Email",
+          "exact": true
+        },
+        "type": "fill",
+        "value": "grace@example.test"
+      },
+      "observed": "Input filled",
+      "durationMs": 24,
+      "startedAt": "2026-10-13T12:10:01.454Z",
+      "attempts": 1
+    },
+    {
+      "id": "submit",
+      "type": "click",
+      "description": "Submit the form",
+      "context": "default",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "submit",
+        "description": "Submit the form",
+        "context": "default",
+        "locator": {
+          "role": "button",
+          "name": "Save contact",
+          "exact": true
+        },
+        "type": "click"
+      },
+      "observed": "Clicked",
+      "durationMs": 62,
+      "startedAt": "2026-10-13T12:10:01.478Z",
+      "attempts": 1
+    },
+    {
+      "id": "ui",
+      "type": "text",
+      "description": "The UI claims success",
+      "context": "default",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "ui",
+        "description": "The UI claims success",
+        "context": "default",
+        "locator": {
+          "role": "status",
+          "exact": true
+        },
+        "type": "text",
+        "equals": "Success"
+      },
+      "observed": {
+        "text": "Success"
+      },
+      "durationMs": 83,
+      "startedAt": "2026-10-13T12:10:01.540Z",
+      "attempts": 1,
+      "screenshot": "005-ui.png"
+    },
+    {
+      "id": "persisted",
+      "type": "api",
+      "description": "The API must contain the saved contact",
+      "context": "default",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "FAIL",
+      "expected": {
+        "id": "persisted",
+        "description": "The API must contain the saved contact",
+        "context": "default",
+        "url": "/api/contacts?email=grace@example.test",
+        "status": 200,
+        "headers": {},
+        "json": {
+          "path": "record.email",
+          "equals": "grace@example.test"
+        },
+        "type": "api"
+      },
+      "observed": "API field record.email: expected \"grace@example.test\"; observed missing.",
+      "durationMs": 75,
+      "startedAt": "2026-10-13T12:10:01.623Z",
+      "attempts": 1,
+      "screenshot": "006-persisted.png"
+    },
+    {
+      "id": "downstream",
+      "type": "api",
+      "description": "A downstream record check depends on persistence",
+      "context": "default",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "NOT_VERIFIED",
+      "expected": {
+        "id": "downstream",
+        "description": "A downstream record check depends on persistence",
+        "context": "default",
+        "url": "/api/contacts?email=grace@example.test",
+        "status": 200,
+        "headers": {},
+        "json": {
+          "path": "record.name",
+          "equals": "Grace Example"
+        },
+        "type": "api"
+      },
+      "observed": "Dependencies did not pass: persisted",
+      "durationMs": 0,
+      "startedAt": "2026-10-13T12:10:01.698Z",
+      "attempts": 0
+    }
+  ],
+  "errors": [],
+  "consoleErrors": {
+    "default": []
+  },
+  "network": [],
+  "traces": [
+    "trace-default.zip"
+  ],
+  "evidenceClasses": [
+    "UI assertions",
+    "Insufficient evidence"
+  ],
+  "summary": {
+    "PASS": 1,
+    "FAIL": 1,
+    "NOT_VERIFIED": 1,
+    "ERROR": 0
+  }
+}

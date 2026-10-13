@@ -1,0 +1,274 @@
+{
+  "schemaVersion": "1",
+  "runnerVersion": "0.1.0",
+  "runId": "saved-contact-2026-10-13T12-09-56-126Z-5cf6740d",
+  "specId": "saved-contact",
+  "revision": 2,
+  "specDigest": "95acfc963622cded263edbaa627b44402526cbed4e47c66dab404ee329f7735c",
+  "goal": "A submitted contact is saved and remains available after reload",
+  "baseUrl": "http://127.0.0.1:4173",
+  "environment": "local test",
+  "preconditions": [
+    "Run npm run demo. Contact records are isolated by a synthetic fixture session and live in memory until restart. Revision 2 adds an absence precondition to prevent stale-record evidence."
+  ],
+  "status": "PASS",
+  "startedAt": "2026-10-13T12:09:56.127Z",
+  "durationMs": 3670,
+  "steps": [
+    {
+      "id": "open",
+      "type": "navigate",
+      "description": "Open the contact form",
+      "context": "default",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "open",
+        "description": "Open the contact form",
+        "context": "default",
+        "type": "navigate",
+        "url": "/form"
+      },
+      "observed": {
+        "url": "http://127.0.0.1:4173/form"
+      },
+      "durationMs": 1312,
+      "startedAt": "2026-10-13T12:09:56.537Z",
+      "attempts": 1,
+      "screenshot": "001-open.png"
+    },
+    {
+      "id": "absent",
+      "type": "api",
+      "description": "This isolated fixture begins without the expected contact",
+      "context": "default",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "absent",
+        "description": "This isolated fixture begins without the expected contact",
+        "context": "default",
+        "url": "/api/contacts?email=ada@example.test",
+        "status": 200,
+        "headers": {},
+        "json": {
+          "path": "record",
+          "equals": null
+        },
+        "type": "api"
+      },
+      "observed": {
+        "url": "http://127.0.0.1:4173/api/contacts?email=ada@example.test",
+        "status": 200,
+        "path": "record",
+        "value": null
+      },
+      "durationMs": 57,
+      "startedAt": "2026-10-13T12:09:57.849Z",
+      "attempts": 1,
+      "screenshot": "002-absent.png"
+    },
+    {
+      "id": "name",
+      "type": "fill",
+      "description": "Enter the synthetic name",
+      "context": "default",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "name",
+        "description": "Enter the synthetic name",
+        "context": "default",
+        "locator": {
+          "label": "Name",
+          "exact": true
+        },
+        "type": "fill",
+        "value": "Ada Example"
+      },
+      "observed": "Input filled",
+      "durationMs": 27,
+      "startedAt": "2026-10-13T12:09:57.906Z",
+      "attempts": 1
+    },
+    {
+      "id": "email",
+      "type": "fill",
+      "description": "Enter the synthetic email",
+      "context": "default",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "email",
+        "description": "Enter the synthetic email",
+        "context": "default",
+        "locator": {
+          "label": "Email",
+          "exact": true
+        },
+        "type": "fill",
+        "value": "ada@example.test"
+      },
+      "observed": "Input filled",
+      "durationMs": 17,
+      "startedAt": "2026-10-13T12:09:57.933Z",
+      "attempts": 1
+    },
+    {
+      "id": "submit",
+      "type": "click",
+      "description": "Save the contact",
+      "context": "default",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "submit",
+        "description": "Save the contact",
+        "context": "default",
+        "locator": {
+          "role": "button",
+          "name": "Save contact",
+          "exact": true
+        },
+        "type": "click"
+      },
+      "observed": "Clicked",
+      "durationMs": 66,
+      "startedAt": "2026-10-13T12:09:57.950Z",
+      "attempts": 1
+    },
+    {
+      "id": "ui",
+      "type": "text",
+      "description": "The UI confirms success",
+      "context": "default",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "ui",
+        "description": "The UI confirms success",
+        "context": "default",
+        "locator": {
+          "role": "status",
+          "exact": true
+        },
+        "type": "text",
+        "equals": "Success"
+      },
+      "observed": {
+        "text": "Success"
+      },
+      "durationMs": 83,
+      "startedAt": "2026-10-13T12:09:58.016Z",
+      "attempts": 1,
+      "screenshot": "006-ui.png"
+    },
+    {
+      "id": "reload",
+      "type": "navigate",
+      "description": "Reload the form before checking persistence",
+      "context": "default",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "reload",
+        "description": "Reload the form before checking persistence",
+        "context": "default",
+        "type": "navigate",
+        "url": "/form"
+      },
+      "observed": {
+        "url": "http://127.0.0.1:4173/form"
+      },
+      "durationMs": 144,
+      "startedAt": "2026-10-13T12:09:58.099Z",
+      "attempts": 1,
+      "screenshot": "007-reload.png"
+    },
+    {
+      "id": "persisted",
+      "type": "api",
+      "description": "The API confirms the submitted record independently",
+      "context": "default",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "persisted",
+        "description": "The API confirms the submitted record independently",
+        "context": "default",
+        "url": "/api/contacts?email=ada@example.test",
+        "status": 200,
+        "headers": {},
+        "json": {
+          "path": "record",
+          "equals": {
+            "name": "Ada Example",
+            "email": "ada@example.test"
+          }
+        },
+        "type": "api"
+      },
+      "observed": {
+        "url": "http://127.0.0.1:4173/api/contacts?email=ada@example.test",
+        "status": 200,
+        "path": "record",
+        "value": {
+          "name": "Ada Example",
+          "email": "ada@example.test"
+        }
+      },
+      "durationMs": 51,
+      "startedAt": "2026-10-13T12:09:58.243Z",
+      "attempts": 1,
+      "screenshot": "008-persisted.png"
+    },
+    {
+      "id": "errors",
+      "type": "noErrors",
+      "description": "No browser errors were observed",
+      "context": "default",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "errors",
+        "description": "No browser errors were observed",
+        "context": "default",
+        "type": "noErrors"
+      },
+      "observed": {
+        "errors": []
+      },
+      "durationMs": 53,
+      "startedAt": "2026-10-13T12:09:58.294Z",
+      "attempts": 1,
+      "screenshot": "009-errors.png"
+    }
+  ],
+  "errors": [],
+  "consoleErrors": {
+    "default": []
+  },
+  "network": [],
+  "traces": [
+    "trace-default.zip"
+  ],
+  "evidenceClasses": [
+    "API-confirmed assertions",
+    "UI assertions"
+  ],
+  "summary": {
+    "PASS": 4,
+    "FAIL": 0,
+    "NOT_VERIFIED": 0,
+    "ERROR": 0
+  }
+}

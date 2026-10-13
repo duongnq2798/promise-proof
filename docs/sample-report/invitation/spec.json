@@ -1,0 +1,162 @@
+{
+  "$schema": "../../schema/spec.schema.json",
+  "schemaVersion": "1",
+  "id": "teammate-invite",
+  "revision": 1,
+  "goal": "A sender invites a teammate who accepts and gains workspace membership",
+  "baseUrl": "http://127.0.0.1:4173",
+  "environment": "local test",
+  "preconditions": [
+    "Run npm run demo. Login is a synthetic local fixture. A controlled sender test API exposes the invitation link; email delivery is not verified."
+  ],
+  "requiredEnv": [],
+  "tags": [],
+  "metadata": {},
+  "timeoutMs": 5000,
+  "evidence": {
+    "screenshots": true,
+    "trace": false,
+    "mask": []
+  },
+  "steps": [
+    {
+      "id": "login",
+      "description": "Open synthetic sender login",
+      "context": "sender",
+      "type": "navigate",
+      "url": "/login"
+    },
+    {
+      "id": "signin",
+      "description": "Create the sender test session",
+      "context": "sender",
+      "locator": {
+        "role": "button",
+        "name": "Sign in as sender",
+        "exact": true
+      },
+      "type": "click"
+    },
+    {
+      "id": "invite-page",
+      "description": "Sender can access the invitation page",
+      "context": "sender",
+      "locator": {
+        "role": "heading",
+        "name": "Invite a teammate",
+        "exact": true
+      },
+      "type": "visible",
+      "expected": true
+    },
+    {
+      "id": "email",
+      "description": "Enter recipient test identity",
+      "context": "sender",
+      "locator": {
+        "label": "Teammate email",
+        "exact": true
+      },
+      "type": "fill",
+      "value": "teammate@example.test"
+    },
+    {
+      "id": "send",
+      "description": "Create invitation",
+      "context": "sender",
+      "locator": {
+        "role": "button",
+        "name": "Invite teammate",
+        "exact": true
+      },
+      "type": "click"
+    },
+    {
+      "id": "created-ui",
+      "description": "UI confirms invitation creation",
+      "context": "sender",
+      "locator": {
+        "role": "status",
+        "exact": true
+      },
+      "type": "text",
+      "equals": "Invitation created"
+    },
+    {
+      "id": "created-api",
+      "description": "Confirm record and retrieve link from the test API",
+      "context": "sender",
+      "url": "/api/invites?email=teammate@example.test",
+      "status": 200,
+      "headers": {},
+      "json": {
+        "path": "created",
+        "equals": true
+      },
+      "capture": {
+        "variable": "invitationLink",
+        "path": "link"
+      },
+      "type": "api"
+    },
+    {
+      "id": "isolated",
+      "description": "Recipient begins without workspace membership",
+      "context": "recipient",
+      "url": "/api/membership",
+      "status": 200,
+      "headers": {},
+      "json": {
+        "path": "member",
+        "equals": false
+      },
+      "type": "api"
+    },
+    {
+      "id": "follow",
+      "description": "Recipient follows the configured invitation link",
+      "context": "recipient",
+      "type": "navigate",
+      "url": {
+        "variable": "invitationLink"
+      }
+    },
+    {
+      "id": "accept",
+      "description": "Recipient accepts the invitation",
+      "context": "recipient",
+      "locator": {
+        "role": "button",
+        "name": "Accept invitation",
+        "exact": true
+      },
+      "type": "click"
+    },
+    {
+      "id": "access",
+      "description": "Recipient reaches the expected workspace",
+      "context": "recipient",
+      "locator": {
+        "role": "heading",
+        "name": "Acme workspace",
+        "exact": true
+      },
+      "type": "visible",
+      "expected": true
+    },
+    {
+      "id": "membership",
+      "description": "Independent API confirms recipient membership",
+      "context": "recipient",
+      "url": "/api/membership",
+      "status": 200,
+      "headers": {},
+      "json": {
+        "path": "member",
+        "equals": true
+      },
+      "type": "api"
+    }
+  ],
+  "cleanup": []
+}

@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "1",
+  "environment": "test",
+  "allowedOrigins": ["http://127.0.0.1:4173"],
+  "outputDir": ".promiseproof/runs"
+}

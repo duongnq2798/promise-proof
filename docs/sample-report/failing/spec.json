@@ -1,0 +1,101 @@
+{
+  "$schema": "../../schema/spec.schema.json",
+  "schemaVersion": "1",
+  "id": "lying-form",
+  "revision": 1,
+  "goal": "A successful form submission actually saves the contact",
+  "baseUrl": "http://127.0.0.1:4173",
+  "environment": "local test",
+  "preconditions": [
+    "Run npm run demo. The /broken handler deliberately omits persistence. This email is distinct from the passing fixture."
+  ],
+  "requiredEnv": [],
+  "tags": [],
+  "metadata": {},
+  "timeoutMs": 1500,
+  "evidence": {
+    "screenshots": true,
+    "trace": true,
+    "mask": []
+  },
+  "steps": [
+    {
+      "id": "open",
+      "description": "Open the deliberately broken form",
+      "context": "default",
+      "type": "navigate",
+      "url": "/broken"
+    },
+    {
+      "id": "name",
+      "description": "Enter the synthetic name",
+      "context": "default",
+      "locator": {
+        "label": "Name",
+        "exact": true
+      },
+      "type": "fill",
+      "value": "Grace Example"
+    },
+    {
+      "id": "email",
+      "description": "Enter a distinct synthetic email",
+      "context": "default",
+      "locator": {
+        "label": "Email",
+        "exact": true
+      },
+      "type": "fill",
+      "value": "grace@example.test"
+    },
+    {
+      "id": "submit",
+      "description": "Submit the form",
+      "context": "default",
+      "locator": {
+        "role": "button",
+        "name": "Save contact",
+        "exact": true
+      },
+      "type": "click"
+    },
+    {
+      "id": "ui",
+      "description": "The UI claims success",
+      "context": "default",
+      "locator": {
+        "role": "status",
+        "exact": true
+      },
+      "type": "text",
+      "equals": "Success"
+    },
+    {
+      "id": "persisted",
+      "description": "The API must contain the saved contact",
+      "context": "default",
+      "url": "/api/contacts?email=grace@example.test",
+      "status": 200,
+      "headers": {},
+      "json": {
+        "path": "record.email",
+        "equals": "grace@example.test"
+      },
+      "type": "api"
+    },
+    {
+      "id": "downstream",
+      "description": "A downstream record check depends on persistence",
+      "context": "default",
+      "url": "/api/contacts?email=grace@example.test",
+      "status": 200,
+      "headers": {},
+      "json": {
+        "path": "record.name",
+        "equals": "Grace Example"
+      },
+      "type": "api"
+    }
+  ],
+  "cleanup": []
+}

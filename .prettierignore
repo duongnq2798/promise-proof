@@ -1,0 +1,9 @@
+node_modules
+dist
+.promiseproof
+.smoke
+docs/sample-report
+package-lock.json
+schema
+.npm-cache
+.review-probes.mjs

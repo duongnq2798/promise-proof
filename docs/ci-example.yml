@@ -1,0 +1,24 @@
+# Consumer example; requires an installed local package and project-specific test app startup.
+name: Verify feature outcome
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  outcome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm exec playwright install --with-deps chromium
+      # Your verify:outcome package script must start/wait for your authorized test app.
+      - run: npm run verify:outcome
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: promiseproof-evidence
+          path: .promiseproof/runs
+          retention-days: 7
+          include-hidden-files: true

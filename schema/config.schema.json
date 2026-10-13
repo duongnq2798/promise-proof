@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "const": "1"
+    },
+    "allowedOrigins": {
+      "minItems": 1,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "allowRemote": {
+      "default": false,
+      "type": "boolean"
+    },
+    "environment": {
+      "type": "string",
+      "const": "test"
+    },
+    "outputDir": {
+      "default": ".promiseproof/runs",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "allowedOrigins",
+    "allowRemote",
+    "environment",
+    "outputDir"
+  ],
+  "additionalProperties": false
+}

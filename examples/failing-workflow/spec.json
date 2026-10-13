@@ -1,0 +1,64 @@
+{
+  "$schema": "../../schema/spec.schema.json",
+  "schemaVersion": "1",
+  "id": "lying-form",
+  "revision": 1,
+  "goal": "A successful form submission actually saves the contact",
+  "baseUrl": "http://127.0.0.1:4173",
+  "timeoutMs": 1500,
+  "preconditions": [
+    "Run npm run demo. The /broken handler deliberately omits persistence. This email is distinct from the passing fixture."
+  ],
+  "evidence": { "screenshots": true, "trace": true },
+  "steps": [
+    {
+      "id": "open",
+      "type": "navigate",
+      "description": "Open the deliberately broken form",
+      "url": "/broken"
+    },
+    {
+      "id": "name",
+      "type": "fill",
+      "description": "Enter the synthetic name",
+      "locator": { "label": "Name" },
+      "value": "Grace Example"
+    },
+    {
+      "id": "email",
+      "type": "fill",
+      "description": "Enter a distinct synthetic email",
+      "locator": { "label": "Email" },
+      "value": "grace@example.test"
+    },
+    {
+      "id": "submit",
+      "type": "click",
+      "description": "Submit the form",
+      "locator": { "role": "button", "name": "Save contact" }
+    },
+    {
+      "id": "ui",
+      "type": "text",
+      "description": "The UI claims success",
+      "locator": { "role": "status" },
+      "equals": "Success"
+    },
+    {
+      "id": "persisted",
+      "type": "api",
+      "description": "The API must contain the saved contact",
+      "url": "/api/contacts?email=grace@example.test",
+      "status": 200,
+      "json": { "path": "record.email", "equals": "grace@example.test" }
+    },
+    {
+      "id": "downstream",
+      "type": "api",
+      "description": "A downstream record check depends on persistence",
+      "url": "/api/contacts?email=grace@example.test",
+      "status": 200,
+      "json": { "path": "record.name", "equals": "Grace Example" }
+    }
+  ]
+}

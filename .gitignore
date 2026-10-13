@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.promiseproof/runs/
+.smoke/
+*.tgz
+.env
+.env.*
+coverage/
+.npm-cache/
+.review-probes.mjs

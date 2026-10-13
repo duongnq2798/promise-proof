@@ -1,0 +1,365 @@
+{
+  "schemaVersion": "1",
+  "runnerVersion": "0.1.0",
+  "runId": "teammate-invite-2026-10-13T12-10-04-850Z-3c61d0b2",
+  "specId": "teammate-invite",
+  "revision": 1,
+  "specDigest": "4e2fa2fa7ba06562acf264bc60cbb53dd657a4ce67464bc9784a34088b28a683",
+  "goal": "A sender invites a teammate who accepts and gains workspace membership",
+  "baseUrl": "http://127.0.0.1:4173",
+  "environment": "local test",
+  "preconditions": [
+    "Run npm run demo. Login is a synthetic local fixture. A controlled sender test API exposes the invitation link; email delivery is not verified."
+  ],
+  "status": "PASS",
+  "startedAt": "2026-10-13T12:10:04.851Z",
+  "durationMs": 3727,
+  "steps": [
+    {
+      "id": "login",
+      "type": "navigate",
+      "description": "Open synthetic sender login",
+      "context": "sender",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "login",
+        "description": "Open synthetic sender login",
+        "context": "sender",
+        "type": "navigate",
+        "url": "/login"
+      },
+      "observed": {
+        "url": "http://127.0.0.1:4173/login"
+      },
+      "durationMs": 2096,
+      "startedAt": "2026-10-13T12:10:04.980Z",
+      "attempts": 1,
+      "screenshot": "001-login.png"
+    },
+    {
+      "id": "signin",
+      "type": "click",
+      "description": "Create the sender test session",
+      "context": "sender",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "signin",
+        "description": "Create the sender test session",
+        "context": "sender",
+        "locator": {
+          "role": "button",
+          "name": "Sign in as sender",
+          "exact": true
+        },
+        "type": "click"
+      },
+      "observed": "Clicked",
+      "durationMs": 34,
+      "startedAt": "2026-10-13T12:10:07.076Z",
+      "attempts": 1
+    },
+    {
+      "id": "invite-page",
+      "type": "visible",
+      "description": "Sender can access the invitation page",
+      "context": "sender",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "invite-page",
+        "description": "Sender can access the invitation page",
+        "context": "sender",
+        "locator": {
+          "role": "heading",
+          "name": "Invite a teammate",
+          "exact": true
+        },
+        "type": "visible",
+        "expected": true
+      },
+      "observed": {
+        "visible": true
+      },
+      "durationMs": 102,
+      "startedAt": "2026-10-13T12:10:07.110Z",
+      "attempts": 1,
+      "screenshot": "003-invite-page.png"
+    },
+    {
+      "id": "email",
+      "type": "fill",
+      "description": "Enter recipient test identity",
+      "context": "sender",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "email",
+        "description": "Enter recipient test identity",
+        "context": "sender",
+        "locator": {
+          "label": "Teammate email",
+          "exact": true
+        },
+        "type": "fill",
+        "value": "teammate@example.test"
+      },
+      "observed": "Input filled",
+      "durationMs": 13,
+      "startedAt": "2026-10-13T12:10:07.212Z",
+      "attempts": 1
+    },
+    {
+      "id": "send",
+      "type": "click",
+      "description": "Create invitation",
+      "context": "sender",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "send",
+        "description": "Create invitation",
+        "context": "sender",
+        "locator": {
+          "role": "button",
+          "name": "Invite teammate",
+          "exact": true
+        },
+        "type": "click"
+      },
+      "observed": "Clicked",
+      "durationMs": 49,
+      "startedAt": "2026-10-13T12:10:07.225Z",
+      "attempts": 1
+    },
+    {
+      "id": "created-ui",
+      "type": "text",
+      "description": "UI confirms invitation creation",
+      "context": "sender",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "created-ui",
+        "description": "UI confirms invitation creation",
+        "context": "sender",
+        "locator": {
+          "role": "status",
+          "exact": true
+        },
+        "type": "text",
+        "equals": "Invitation created"
+      },
+      "observed": {
+        "text": "Invitation created"
+      },
+      "durationMs": 60,
+      "startedAt": "2026-10-13T12:10:07.274Z",
+      "attempts": 1,
+      "screenshot": "006-created-ui.png"
+    },
+    {
+      "id": "created-api",
+      "type": "api",
+      "description": "Confirm record and retrieve link from the test API",
+      "context": "sender",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "created-api",
+        "description": "Confirm record and retrieve link from the test API",
+        "context": "sender",
+        "url": "/api/invites?email=teammate@example.test",
+        "status": 200,
+        "headers": {},
+        "json": {
+          "path": "created",
+          "equals": true
+        },
+        "capture": {
+          "variable": "invitationLink",
+          "path": "link"
+        },
+        "type": "api"
+      },
+      "observed": {
+        "url": "http://127.0.0.1:4173/api/invites?email=teammate@example.test",
+        "status": 200,
+        "path": "created",
+        "value": true,
+        "captured": "invitationLink"
+      },
+      "durationMs": 50,
+      "startedAt": "2026-10-13T12:10:07.334Z",
+      "attempts": 1,
+      "screenshot": "007-created-api.png"
+    },
+    {
+      "id": "isolated",
+      "type": "api",
+      "description": "Recipient begins without workspace membership",
+      "context": "recipient",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "isolated",
+        "description": "Recipient begins without workspace membership",
+        "context": "recipient",
+        "url": "/api/membership",
+        "status": 200,
+        "headers": {},
+        "json": {
+          "path": "member",
+          "equals": false
+        },
+        "type": "api"
+      },
+      "observed": {
+        "url": "http://127.0.0.1:4173/api/membership",
+        "status": 200,
+        "path": "member",
+        "value": false
+      },
+      "durationMs": 147,
+      "startedAt": "2026-10-13T12:10:07.384Z",
+      "attempts": 1,
+      "screenshot": "008-isolated.png"
+    },
+    {
+      "id": "follow",
+      "type": "navigate",
+      "description": "Recipient follows the configured invitation link",
+      "context": "recipient",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "follow",
+        "description": "Recipient follows the configured invitation link",
+        "context": "recipient",
+        "type": "navigate",
+        "url": {
+          "variable": "invitationLink"
+        }
+      },
+      "observed": {
+        "url": "http://127.0.0.1:4173/accept?token=[REDACTED]"
+      },
+      "durationMs": 104,
+      "startedAt": "2026-10-13T12:10:07.531Z",
+      "attempts": 1,
+      "screenshot": "009-follow.png"
+    },
+    {
+      "id": "accept",
+      "type": "click",
+      "description": "Recipient accepts the invitation",
+      "context": "recipient",
+      "assertion": false,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "accept",
+        "description": "Recipient accepts the invitation",
+        "context": "recipient",
+        "locator": {
+          "role": "button",
+          "name": "Accept invitation",
+          "exact": true
+        },
+        "type": "click"
+      },
+      "observed": "Clicked",
+      "durationMs": 36,
+      "startedAt": "2026-10-13T12:10:07.635Z",
+      "attempts": 1
+    },
+    {
+      "id": "access",
+      "type": "visible",
+      "description": "Recipient reaches the expected workspace",
+      "context": "recipient",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "access",
+        "description": "Recipient reaches the expected workspace",
+        "context": "recipient",
+        "locator": {
+          "role": "heading",
+          "name": "Acme workspace",
+          "exact": true
+        },
+        "type": "visible",
+        "expected": true
+      },
+      "observed": {
+        "visible": true
+      },
+      "durationMs": 130,
+      "startedAt": "2026-10-13T12:10:07.671Z",
+      "attempts": 1,
+      "screenshot": "011-access.png"
+    },
+    {
+      "id": "membership",
+      "type": "api",
+      "description": "Independent API confirms recipient membership",
+      "context": "recipient",
+      "assertion": true,
+      "phase": "workflow",
+      "status": "PASS",
+      "expected": {
+        "id": "membership",
+        "description": "Independent API confirms recipient membership",
+        "context": "recipient",
+        "url": "/api/membership",
+        "status": 200,
+        "headers": {},
+        "json": {
+          "path": "member",
+          "equals": true
+        },
+        "type": "api"
+      },
+      "observed": {
+        "url": "http://127.0.0.1:4173/api/membership",
+        "status": 200,
+        "path": "member",
+        "value": true
+      },
+      "durationMs": 48,
+      "startedAt": "2026-10-13T12:10:07.801Z",
+      "attempts": 1,
+      "screenshot": "012-membership.png"
+    }
+  ],
+  "errors": [],
+  "consoleErrors": {
+    "sender": [],
+    "recipient": []
+  },
+  "network": [],
+  "traces": [],
+  "evidenceClasses": [
+    "API-confirmed assertions",
+    "UI assertions",
+    "Cross-context assertions"
+  ],
+  "summary": {
+    "PASS": 6,
+    "FAIL": 0,
+    "NOT_VERIFIED": 0,
+    "ERROR": 0
+  }
+}

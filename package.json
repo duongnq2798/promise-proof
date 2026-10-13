@@ -1,0 +1,63 @@
+{
+  "name": "promiseproof-local",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI built it. Prove it works. Local deterministic outcome verification.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "bin": {
+    "promiseproof": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "assets",
+    "dist",
+    "schema",
+    "skills",
+    "examples",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md",
+    "ARCHITECTURE.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc && node scripts/schema.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src tests",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "demo": "node examples/server.mjs",
+    "promiseproof": "node dist/cli.js",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.64.0",
+    "commander": "^15.0.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@types/node": "^26.6.5",
+    "eslint": "^10.12.0",
+    "prettier": "^3.9.10",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.2",
+    "vitest": "^5.0.4",
+    "yaml": "^2.9.1"
+  }
+}
