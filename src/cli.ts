@@ -1,19 +1,12 @@
 #!/usr/bin/env node
 import { Command, CommanderError } from 'commander';
-import {
-  access,
-  mkdir,
-  readFile,
-  readdir,
-  rm,
-  writeFile,
-} from 'node:fs/promises';
+import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import path from 'node:path';
-import { chromium } from '@playwright/test';
+import { runDoctor } from './doctor.js';
 import { verify, errorMessage } from './runner.js';
-import { ConfigurationError, parseConfig, parseSpec } from './spec.js';
-import { environmentNames, redact } from './security.js';
+import { ConfigurationError, parseConfig } from './spec.js';
+import { redact } from './security.js';
 import { exitCode } from './result.js';
 
 async function readJson(file: string): Promise<unknown> {
@@ -177,70 +170,42 @@ program
   });
 program
   .command('doctor')
+  .description(
+    'Diagnose local setup and show repair steps without testing application outcomes',
+  )
   .option('--config <file>', 'Test policy', configPath)
-  .option('--spec <file>', 'Check required environment variables')
-  .action(async (options: { config: string; spec?: string }) => {
-    const checks: { name: string; ok: boolean; detail: string }[] = [];
-    checks.push({
-      name: 'Node.js',
-      ok:
-        Number(process.versions.node.split('.')[0]) > 22 ||
-        (Number(process.versions.node.split('.')[0]) === 22 &&
-          Number(process.versions.node.split('.')[1]) >= 12),
-      detail: process.version,
-    });
-    try {
-      const browser = await chromium.launch({ timeout: 15000 });
-      await browser.close();
-      checks.push({
-        name: 'Chromium',
-        ok: true,
-        detail: 'Launch and shutdown verified',
-      });
-    } catch {
-      checks.push({
-        name: 'Chromium',
-        ok: false,
-        detail:
-          'Install browser binaries: npm exec playwright install chromium (Linux: add --with-deps)',
-      });
-    }
-    try {
-      const config = parseConfig(await readJson(options.config));
-      checks.push({
-        name: 'Configuration',
-        ok: true,
-        detail: `${config.allowedOrigins.length} explicit origins; test environment`,
-      });
-      await mkdir(config.outputDir, { recursive: true });
-      const probe = path.join(config.outputDir, `.doctor-${process.pid}`);
-      await writeFile(probe, '', { flag: 'wx' });
-      await rm(probe);
-      checks.push({ name: 'Evidence directory', ok: true, detail: 'Writable' });
-    } catch (error) {
-      checks.push({
-        name: 'Configuration / evidence directory',
-        ok: false,
-        detail: errorMessage(error),
-      });
-    }
-    if (options.spec) {
-      const spec = parseSpec(await readJson(options.spec));
-      for (const name of environmentNames(spec))
-        checks.push({
-          name,
-          ok: Boolean(process.env[name]),
-          detail: process.env[name]
-            ? 'Present (value withheld)'
-            : 'Missing: set this environment variable',
-        });
-    }
-    for (const check of checks)
-      console.log(
-        `${check.ok ? 'OK' : 'ERROR'} ${check.name}: ${check.detail}`,
-      );
-    if (checks.some((c) => !c.ok)) process.exitCode = 3;
-  });
+  .option(
+    '--spec <file>',
+    'Validate workflow prerequisites and policy compatibility',
+  )
+  .option('--json', 'Print structured setup checks and repair hints')
+  .action(
+    async (options: { config: string; spec?: string; json?: boolean }) => {
+      const report = await runDoctor(options);
+      if (options.json) console.log(JSON.stringify(report));
+      else {
+        for (const check of report.checks) {
+          const label =
+            check.status === 'PASS'
+              ? 'OK'
+              : check.status === 'FAIL'
+                ? 'ERROR'
+                : 'NOT CHECKED';
+          console.log(
+            `${label} ${check.name} [${check.code}]: ${check.detail}`,
+          );
+          if (check.remediation) console.log(`  Next: ${check.remediation}`);
+        }
+        console.log(
+          `${report.status === 'READY' ? 'Setup ready for the checks performed.' : 'Setup blocked; resolve the failed checks.'} Application outcomes have not been verified.`,
+        );
+        console.log(
+          'Next: run promiseproof verify <spec.json> --config <policy.json> after setup is ready.',
+        );
+      }
+      process.exitCode = report.exitCode;
+    },
+  );
 try {
   await program.parseAsync();
 } catch (error) {

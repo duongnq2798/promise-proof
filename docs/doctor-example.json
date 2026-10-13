@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1",
+  "status": "READY",
+  "outcomesVerified": false,
+  "exitCode": 0,
+  "checks": [
+    {
+      "code": "NODE_JS",
+      "name": "Node.js",
+      "status": "PASS",
+      "detail": "v24.12.0"
+    },
+    {
+      "code": "CONFIGURATION",
+      "name": "Configuration",
+      "status": "PASS",
+      "detail": "1 exact authorized origins; test environment."
+    },
+    {
+      "code": "SPECIFICATION",
+      "name": "Specification",
+      "status": "PASS",
+      "detail": "Versioned specification is valid."
+    },
+    {
+      "code": "TARGET_POLICY",
+      "name": "Target policy",
+      "status": "PASS",
+      "detail": "Base URL and available static/environment URL references are authorized."
+    },
+    {
+      "code": "EVIDENCE_POLICY",
+      "name": "Evidence policy",
+      "status": "PASS",
+      "detail": "Configured evidence respects credential-reference constraints."
+    },
+    {
+      "code": "EVIDENCE_DIRECTORY",
+      "name": "Evidence directory",
+      "status": "PASS",
+      "detail": "Write and cleanup verified."
+    },
+    {
+      "code": "CHROMIUM",
+      "name": "Chromium",
+      "status": "PASS",
+      "detail": "Launch and shutdown verified; no application request made."
+    }
+  ]
+}

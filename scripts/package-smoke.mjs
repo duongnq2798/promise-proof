@@ -81,6 +81,31 @@ try {
     );
     spec.baseUrl = baseUrl;
     await writeFile(path.join(directory, 'spec.json'), JSON.stringify(spec));
+    if (name === 'simple-form') {
+      const { stdout: doctorOutput } = await command(
+        process.execPath,
+        [
+          cli,
+          'doctor',
+          '--spec',
+          'spec.json',
+          '--config',
+          'policy.json',
+          '--json',
+        ],
+        { cwd: directory },
+      );
+      const diagnosis = JSON.parse(doctorOutput);
+      if (
+        diagnosis.status !== 'READY' ||
+        diagnosis.outcomesVerified !== false ||
+        diagnosis.exitCode !== 0
+      )
+        throw new Error(
+          'Packaged doctor did not report setup readiness correctly',
+        );
+      console.log('Packaged doctor: READY (outcomesVerified false)');
+    }
     let code = 0;
     let stdout;
     try {
@@ -126,7 +151,7 @@ try {
   await command(process.execPath, ['exports-smoke.mjs'], { cwd: directory });
   await readFile(path.join(installed, 'ARCHITECTURE.md'));
   console.log(
-    'Package smoke PASS: init, exports, agent instructions, three real browser workflows; ' +
+    'Package smoke PASS: init, doctor, exports, agent instructions, three real browser workflows; ' +
       directory,
   );
 } finally {

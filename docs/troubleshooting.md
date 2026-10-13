@@ -1,5 +1,20 @@
 # Troubleshooting
 
+Start with `promiseproof doctor --spec <spec.json> --config <policy.json>`. From the checkout, use `node dist/cli.js` in place of `promiseproof`. Each failed diagnostic has a stable code and a next action; add `--json` for an agent or script. Doctor checks setup without contacting the application or proving its outcomes.
+
+| Doctor code                 | Next action                                                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- |
+| CONFIG_MISSING              | Run init or supply the policy with --config                                                             |
+| CONFIG_INVALID              | Check JSON and exact origins; do not put paths or trailing slashes in allowedOrigins                    |
+| SPEC_MISSING / SPEC_INVALID | Check the --spec path, JSON, supported step types and dependency order                                  |
+| TARGET_POLICY               | Check URLs against allowedOrigins; remote opt-in applies only to an authorized test deployment          |
+| ENVIRONMENT_VARIABLE        | Set the named variable in the process running PromiseProof; values are withheld                         |
+| EVIDENCE_POLICY             | Disable binary artifacts for credential references and traces for API captures; replace secret literals |
+| EVIDENCE_DIRECTORY          | Use a writable directory and check permissions/free space                                               |
+| CHROMIUM                    | Install matching binaries if missing; otherwise check OS dependencies, permissions and browser policies |
+
+Doctor exits **2** for invalid/missing inputs or incompatible policy/spec, **3** for environment failures, and **0** for ready setup. Input failures take precedence. Captured URLs remain NOT_CHECKED until the runner can resolve and authorize them. Supplying no spec omits workflow-specific checks. A READY result never substitutes for `verify`.
+
 | Observation                    | Action                                                                                |
 | ------------------------------ | ------------------------------------------------------------------------------------- |
 | Missing Chromium               | npm exec playwright install chromium; Linux may need --with-deps                      |

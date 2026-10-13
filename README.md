@@ -10,6 +10,8 @@ The report uses a compact verification workspace: expandable workflow steps, an 
 
 **The flagship demo:** a form says “Success” but never saves the record. The UI assertion passes; the independent API assertion fails; the dependent assertion is NOT_VERIFIED. A screenshot cannot overrule the failed persistence check.
 
+Start with the [step-by-step first-run guide](docs/getting-started.md). The doctor command now checks spec/policy compatibility and gives repair actions for setup problems; add `--json` for structured agent diagnostics. READY means setup checks passed, with `outcomesVerified: false` until you run verify.
+
 ## Try it locally
 
 Node.js 22.12 or newer. From this checkout:
@@ -33,7 +35,7 @@ node dist/cli.js verify examples/invitation-flow/spec.json --config examples/con
 
 Expected verification exit codes: **0**, **1**, **0**. The failure is intentional. Each command prints its report path under .promiseproof/runs/<run-id>/report.html. Open it directly in a browser. See genuine checked-in [passing](docs/sample-report/passing/report.html), [failing](docs/sample-report/failing/report.html) and [invitation](docs/sample-report/invitation/report.html) bundles.
 
-Linux installation may require npm exec playwright install --with-deps chromium. Windows execution is tested here. Linux/macOS CI is configured; remote CI has not been executed in this build session.
+Linux installation may require npm exec playwright install --with-deps chromium. The initial commit's [six-job CI run](https://github.com/duongnq2798/promise-proof/actions/runs/38428830158) passed on Windows, Linux and macOS with Node 22/24, including the real examples and packed consumer smoke. Follow-up changes still require their own checks.
 
 This project is **not published to npm**. Do not use a public npx promiseproof command. For a local executable, run npm pack and install its tarball into your test project. The provisional private package name is promiseproof-local.
 

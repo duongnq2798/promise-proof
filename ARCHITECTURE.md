@@ -15,6 +15,7 @@ src/report-icons.ts  fixed inline SVG icon set
 src/report-styles.ts  loads the local report stylesheet for inline embedding
 assets/         report CSS, embedded Geist font and SIL font license
 src/cli.ts       initialization, verification, diagnostics and agent export
+src/doctor.ts    structured setup diagnostics and actionable repair guidance
 src/index.ts     public library exports
 examples/       form, broken persistence and invitation fixtures
 tests/          unit, real Chromium and built CLI tests
@@ -38,3 +39,5 @@ Each bundle has a unique run id and relative artifact paths. spec.json stores th
 HTML and JSON share the same result. Website text is escaped; the report runs no scripts, loads no external assets and has a restrictive CSP. Images/traces sit alongside HTML. Licensed Geist fonts are embedded as data URLs; font-src permits only data. Native radio controls and CSS support System/Light/Dark themes, and native disclosures provide keyboard-accessible workflow details. Failed steps open by default. A two-column review layout pairs the workflow with a genuine screenshot and recorded observation; mobile stacks those sections. Full raw observations remain inspectable. Artifact links accept only generated PNG/ZIP basenames. Protocol fields survive redaction when a secret equals a status word.
 
 Extension seams are source adapters, public verify()/renderReport() and schema-versioned JSON. No arbitrary runtime plugin execution or commercial-service dependency. See CONTRIBUTING.md.
+
+Doctor is separate from outcome verification. It validates supplied files, authorizes available spec URL references, checks credential/evidence constraints and environment-variable presence, probes uniquely named evidence-directory files, and launches/closes Chromium without app requests. It produces the same check records for terminal and JSON output. Missing/invalid inputs and policy incompatibility exit 2; environmental failures exit 3; input errors take precedence. READY applies only to the checks performed, and outcomesVerified is always false. Omitted specs and captured URLs are explicitly NOT_CHECKED. Diagnostic messages do not echo raw JSON, URL values or credential values; human fields receive redaction without altering protocol codes/statuses. Runtime policy enforcement and deterministic verdicts remain in the existing runner.

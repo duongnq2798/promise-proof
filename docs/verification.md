@@ -1,6 +1,6 @@
 # Verification record
 
-Date: 2026-10-13, Asia/Bangkok. Host: Windows, Node.js 24.12.0. Runner uses Playwright 1.64.0 / Chromium revision 1248. Commands below were executed locally; no remote CI result, npm publication or deployment is claimed.
+Date: 2026-10-13, Asia/Bangkok. Local host: Windows, Node.js 24.12.0. Runner uses Playwright 1.64.0 / Chromium revision 1248. Local commands and the separately observed initial-commit CI run are distinguished below. No npm publication or deployment is claimed.
 
 ## Quality checks
 
@@ -40,4 +40,17 @@ The original bundles remain under .promiseproof/runs. Portable copies are in doc
 
 ## Remaining unverified boundaries
 
-Fresh agent-client auto-discovery, Claude Code/Cursor invocation, Linux/macOS execution, remote GitHub Actions uploads, real email delivery and public registry installation have not been exercised. Public branding/owner/contact decisions remain pending. No output is described as cryptographic proof or production certification.
+Fresh agent-client auto-discovery, Claude Code/Cursor invocation, external-user first-run testing, real email delivery and public registry installation have not been exercised. Public branding/owner/contact decisions remain pending. No output is described as cryptographic proof or production certification.
+
+## Observed initial-commit CI
+
+[GitHub run 38428830158](https://github.com/duongnq2798/promise-proof/actions/runs/38428830158), head `da2b8150fcf9dbdf49d7e7894b9af8b0f310215c`, completed successfully. All six jobs passed: Windows/Linux/macOS with Node 22 and 24. The workflow executes npm ci, Chromium installation, build/check, real samples, evidence upload, pack and isolated consumer smoke. Follow-up diagnostics changes below are not part of that commit's results.
+
+## Actionable diagnostics follow-up
+
+- Fresh npm run check passed type checking, ESLint, formatting, **83 tests across 5 files** and production build. The final suite took 28.50 seconds on this Windows host.
+- Eight new CLI acceptance cases first failed against the original CLI, including a reproducible false-ready target-policy mismatch. They passed after implementation. An additional case covers captured URLs and unsafe API-capture tracing.
+- A separate read-only reviewer inspected the new diagnostic module and CLI boundary. Its two findings were reproduced RED then fixed GREEN: secret-literal serialization parity and real evidence data writes with cleanup after failure. The quota failure is simulated at the FileHandle write boundary while creation and removal remain real; actual OS quota/ACL exhaustion is unverified.
+- Real CLI coverage includes readable/JSON readiness, no app requests, missing/malformed files, missing browser, unwritable output, credential withholding, evidence constraints and unchecked boundaries. The JSON reports outcomesVerified false and setup-only readiness.
+- `doctor-example.json` is output from the actual built doctor with the simple-form spec and example policy, formatted for readability; no verdict or check was fabricated.
+- A fresh packaged consumer at `.smoke/package-njcLPg` passed installed init, doctor JSON readiness with outcomesVerified false, documented ESM exports, agent export and all three real workflows with exits 0/1/0. The enhanced consumer check is included in the existing CI workflow through `scripts/package-smoke.mjs`.

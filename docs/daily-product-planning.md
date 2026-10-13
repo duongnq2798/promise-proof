@@ -25,7 +25,7 @@ For each priority, include:
 
 ## Guardrails
 
-[FACT] The runner currently supports a scoped local MVP. Windows/local package evidence is recorded; broader platform execution and public release prerequisites remain unverified. See `release-readiness.md` and `verification.md`.
+[FACT] The runner currently supports a scoped local MVP. Local package evidence and the initial commit's six-job Windows/Linux/macOS CI are recorded. External user testing and public package-release prerequisites remain unverified. See `release-readiness.md` and `verification.md`; subsequent changes need their own validation.
 
 [RECOMMENDATION] Address onboarding and actionable troubleshooting before expanding into email delivery or complex authentication. Reconsider this order when actual user feedback supplies stronger evidence.
 

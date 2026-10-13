@@ -532,10 +532,11 @@ describe('real Chromium verification', () => {
 });
 describe('built CLI', () => {
   const cli = path.resolve('dist/cli.js');
-  async function call(args: string[]) {
+  async function call(args: string[], env?: NodeJS.ProcessEnv) {
     try {
       const result = await command(process.execPath, [cli, ...args], {
         cwd: workspace,
+        env,
       });
       return { ...result, code: 0 };
     } catch (error) {
@@ -627,6 +628,240 @@ describe('built CLI', () => {
       (await call(['doctor', '--config', 'config.json', '--spec', 'spec.json']))
         .code,
     ).toBe(0);
+  });
+  it('doctor emits setup readiness JSON without claiming verified outcomes', async () => {
+    await files(await example('simple-form'));
+    const result = await call([
+      'doctor',
+      '--config',
+      'config.json',
+      '--spec',
+      'spec.json',
+      '--json',
+    ]);
+    expect(result.code).toBe(0);
+    const report = JSON.parse(result.stdout);
+    expect(report).toMatchObject({
+      schemaVersion: '1',
+      status: 'READY',
+      outcomesVerified: false,
+      exitCode: 0,
+    });
+    expect(
+      report.checks.some(
+        (c: { code: string; status: string }) =>
+          c.code === 'TARGET_POLICY' && c.status === 'PASS',
+      ),
+    ).toBe(true);
+  });
+  it('doctor rejects a disallowed target before making any application request', async () => {
+    await files(await example('simple-form'));
+    await writeFile(
+      path.join(workspace, 'config.json'),
+      JSON.stringify({ ...policy(), allowedOrigins: ['http://127.0.0.1:9'] }),
+    );
+    let requests = 0;
+    const count = () => {
+      requests++;
+    };
+    server.on('request', count);
+    try {
+      const result = await call([
+        'doctor',
+        '--config',
+        'config.json',
+        '--spec',
+        'spec.json',
+      ]);
+      expect(result.code).toBe(2);
+      expect(result.stdout).toContain('TARGET_POLICY');
+      expect(result.stdout).toContain('allowedOrigins');
+      expect(requests).toBe(0);
+    } finally {
+      server.off('request', count);
+    }
+  });
+  it('doctor keeps malformed input private and returns a JSON repair hint', async () => {
+    await files(await example('simple-form'));
+    const marker = 'synthetic-private-value-not-for-output';
+    await writeFile(
+      path.join(workspace, 'spec.json'),
+      '{"bad":"' + marker + '"',
+    );
+    const result = await call([
+      'doctor',
+      '--config',
+      'config.json',
+      '--spec',
+      'spec.json',
+      '--json',
+    ]);
+    expect(result.code).toBe(2);
+    expect(result.stdout + result.stderr).not.toContain(marker);
+    const report = JSON.parse(result.stdout);
+    expect(report.status).toBe('BLOCKED');
+    expect(report.checks).toContainEqual(
+      expect.objectContaining({
+        code: 'SPEC_INVALID',
+        status: 'FAIL',
+        remediation: expect.any(String),
+      }),
+    );
+  });
+  it('doctor reports a missing policy with an init action and exit 2', async () => {
+    const result = await call([
+      'doctor',
+      '--config',
+      'missing-policy.json',
+      '--json',
+    ]);
+    expect(result.code).toBe(2);
+    const check = JSON.parse(result.stdout).checks.find(
+      (c: { code: string }) => c.code === 'CONFIG_MISSING',
+    );
+    expect(check.status).toBe('FAIL');
+    expect(check.remediation).toContain('init');
+  });
+  it('doctor diagnoses an absent browser without installing it', async () => {
+    await files(await example('simple-form'));
+    const result = await call(['doctor', '--config', 'config.json', '--json'], {
+      ...process.env,
+      PLAYWRIGHT_BROWSERS_PATH: path.join(workspace, 'no-browsers'),
+    });
+    expect(result.code).toBe(3);
+    const check = JSON.parse(result.stdout).checks.find(
+      (c: { code: string }) => c.code === 'CHROMIUM',
+    );
+    expect(check.status).toBe('FAIL');
+    expect(check.remediation).toContain('playwright install');
+    await expect(stat(path.join(workspace, 'no-browsers'))).rejects.toThrow();
+  });
+  it('doctor distinguishes evidence write failure from invalid configuration', async () => {
+    await files(await example('simple-form'));
+    const outputFile = path.join(workspace, 'not-a-directory');
+    await writeFile(outputFile, 'preserve this file');
+    await writeFile(
+      path.join(workspace, 'config.json'),
+      JSON.stringify({ ...policy(), outputDir: outputFile }),
+    );
+    const result = await call(['doctor', '--config', 'config.json', '--json']);
+    expect(result.code).toBe(3);
+    const checks = JSON.parse(result.stdout).checks;
+    expect(checks).toContainEqual(
+      expect.objectContaining({ code: 'CONFIGURATION', status: 'PASS' }),
+    );
+    expect(checks).toContainEqual(
+      expect.objectContaining({
+        code: 'EVIDENCE_DIRECTORY',
+        status: 'FAIL',
+        remediation: expect.any(String),
+      }),
+    );
+    expect(await readFile(outputFile, 'utf8')).toBe('preserve this file');
+  });
+  it('doctor withholds credential values and blocks incompatible evidence', async () => {
+    const input = {
+      ...spec([
+        open('/'),
+        {
+          id: 'visible',
+          type: 'visible',
+          description: 'Heading',
+          locator: { role: 'heading' },
+        },
+      ]),
+      requiredEnv: ['PP_DOCTOR_SECRET'],
+    };
+    await files(input);
+    const env = { ...process.env, PP_DOCTOR_SECRET: 'synthetic-doctor-secret' };
+    const ready = await call(
+      ['doctor', '--config', 'config.json', '--spec', 'spec.json', '--json'],
+      env,
+    );
+    expect(ready.code).toBe(0);
+    expect(ready.stdout + ready.stderr).not.toContain(env.PP_DOCTOR_SECRET);
+    const missing = await call(
+      ['doctor', '--config', 'config.json', '--spec', 'spec.json', '--json'],
+      { ...env, PP_DOCTOR_SECRET: '' },
+    );
+    expect(missing.code).toBe(3);
+    expect(JSON.parse(missing.stdout).checks).toContainEqual(
+      expect.objectContaining({
+        code: 'ENVIRONMENT_VARIABLE',
+        status: 'FAIL',
+        name: 'PP_DOCTOR_SECRET',
+      }),
+    );
+    await files({ ...input, evidence: { screenshots: true } });
+    const unsafe = await call(
+      ['doctor', '--config', 'config.json', '--spec', 'spec.json', '--json'],
+      env,
+    );
+    expect(unsafe.code).toBe(2);
+    expect(JSON.parse(unsafe.stdout).checks).toContainEqual(
+      expect.objectContaining({ code: 'EVIDENCE_POLICY', status: 'FAIL' }),
+    );
+    expect(unsafe.stdout + unsafe.stderr).not.toContain(env.PP_DOCTOR_SECRET);
+  });
+  it('doctor marks workflow-specific checks as unchecked without a spec', async () => {
+    await files(await example('simple-form'));
+    const result = await call(['doctor', '--config', 'config.json', '--json']);
+    expect(result.code).toBe(0);
+    expect(JSON.parse(result.stdout).checks).toContainEqual(
+      expect.objectContaining({ code: 'SPECIFICATION', status: 'NOT_CHECKED' }),
+    );
+  });
+  it('doctor defers captured URLs and rejects traces that may capture credentials', async () => {
+    const input = await example('invitation-flow');
+    await files(input);
+    const deferred = await call([
+      'doctor',
+      '--config',
+      'config.json',
+      '--spec',
+      'spec.json',
+      '--json',
+    ]);
+    expect(deferred.code).toBe(0);
+    expect(JSON.parse(deferred.stdout).checks).toContainEqual(
+      expect.objectContaining({ code: 'RUNTIME_URLS', status: 'NOT_CHECKED' }),
+    );
+    await files({ ...input, evidence: { ...input.evidence, trace: true } });
+    const unsafe = await call([
+      'doctor',
+      '--config',
+      'config.json',
+      '--spec',
+      'spec.json',
+      '--json',
+    ]);
+    expect(unsafe.code).toBe(2);
+    expect(JSON.parse(unsafe.stdout).checks).toContainEqual(
+      expect.objectContaining({ code: 'EVIDENCE_POLICY', status: 'FAIL' }),
+    );
+  });
+  it('doctor uses the same secret-literal serialization as verification', async () => {
+    const input = {
+      ...spec([
+        open('/'),
+        {
+          id: 'visible',
+          type: 'visible',
+          description: 'Heading',
+          locator: { role: 'heading' },
+        },
+      ]),
+      requiredEnv: ['PP_DOCTOR_FORMAT_SECRET'],
+    };
+    await files(input);
+    const result = await call(
+      ['doctor', '--config', 'config.json', '--spec', 'spec.json', '--json'],
+      { ...process.env, PP_DOCTOR_FORMAT_SECRET: ': ' },
+    );
+    expect(result.code).toBe(2);
+    expect(JSON.parse(result.stdout).checks).toContainEqual(
+      expect.objectContaining({ code: 'EVIDENCE_POLICY', status: 'FAIL' }),
+    );
   });
   it('rejects command errors and report traversal with exit 2', async () => {
     expect((await call(['unknown'])).code).toBe(2);
