@@ -5,6 +5,14 @@
   "description": "AI built it. Prove it works. Local deterministic outcome verification.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duongnq2798/promise-proof.git"
+  },
+  "bugs": {
+    "url": "https://github.com/duongnq2798/promise-proof/issues"
+  },
+  "homepage": "https://github.com/duongnq2798/promise-proof#readme",
   "engines": {
     "node": ">=22.12.0"
   },

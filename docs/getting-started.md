@@ -85,7 +85,7 @@ These commands use `.promiseproof/config.json` by default. Start your test app b
 
 ## Install the CLI in another project
 
-Run `npm pack` in this checkout. In the consuming project, install that local tarball:
+Use the tarball from the [GitHub preview release](https://github.com/duongnq2798/promise-proof/releases/tag/v0.1.0-preview.1), or run `npm pack` in this checkout. The [preview instructions](releases/v0.1.0-preview.1.md) cover running the packaged examples without cloning the repository. In the consuming project, install the downloaded/local tarball:
 
 ```sh
 npm install /absolute/path/to/promiseproof-local-0.1.0.tgz

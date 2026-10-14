@@ -75,3 +75,10 @@ Fresh agent-client auto-discovery, Claude Code/Cursor invocation, external-user 
 - The CLI intentionally still displays the input file path. This increment covers the shared JSON-file reader, not every validation/runtime message or binary-artifact privacy. OS permission exhaustion and external-user usability are not established by these tests.
 - A separate read-only reviewer found no Critical, Important or Minor issues requiring repair. Its built-CLI probes confirmed malformed input with --json, missing paths, directory inputs, oversized input and a valid policy padded to exactly 1 MiB. The exact-limit input was accepted; rejected inputs exited 2 and created no evidence directory. These probes are distinct from the five automated regression cases. Exhaustive ACL testing remains unverified.
 - Implementation commit `5f653c0043ef0319e903d69ac81275ba97624b7d` passed all six Windows/Linux/macOS and Node 22/24 jobs in [run 38493375599](https://github.com/duongnq2798/promise-proof/actions/runs/38493375599), including the full suite, genuine examples and the installed malformed-input privacy check. Earlier platform runs are separate historical evidence.
+
+## GitHub preview preparation — 2026-10-14
+
+- The user authorized distribution first and further development afterward. The candidate is a GitHub prerelease with a local-install tarball; npm publication, stable branding and hosted deployment are separate.
+- Fresh npm run check passed typecheck, lint, formatting, 95 tests / 5 files and build; tests took 70.59 seconds. A fresh candidate consumer at `.smoke/package-UMlRB1` passed all installed checks and three real workflows with exits 0/1/0.
+- Read-only independent review found no Critical/Important/Minor issues. Its package dry-run confirmed the necessary runtime/example/docs assets and excluded private runs, .env, caches, node_modules and probe files. Release notes distinguish source test evidence from external-user usability.
+- GitHub private vulnerability reporting was enabled and read back as true. No vulnerability message was sent. Final asset checksum and actual release publication are recorded when performed.

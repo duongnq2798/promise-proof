@@ -39,7 +39,7 @@ Expected verification exit codes: **0**, **1**, **0**. The failure is intentiona
 
 Linux installation may require npm exec playwright install --with-deps chromium. The initial commit's [six-job CI run](https://github.com/duongnq2798/promise-proof/actions/runs/38428830158) passed on Windows, Linux and macOS with Node 22/24, including the real examples and packed consumer smoke. Follow-up changes still require their own checks.
 
-This project is **not published to npm**. Do not use a public npx promiseproof command. For a local executable, run npm pack and install its tarball into your test project. The provisional private package name is promiseproof-local.
+This project is **not published to npm**. Do not use a public npx promiseproof command. Download the installable tarball from the [GitHub preview release](https://github.com/duongnq2798/promise-proof/releases/tag/v0.1.0-preview.1) and follow its [installation instructions](docs/releases/v0.1.0-preview.1.md), or run npm pack in this checkout. The provisional private package name is promiseproof-local.
 
 ## A specification, not a model verdict
 
