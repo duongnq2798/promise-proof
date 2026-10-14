@@ -1,0 +1,302 @@
+{
+  "recordedAt": "2026-10-14T03:38:39.238Z",
+  "language": "en",
+  "audio": false,
+  "sourceCommit": "0c6d48de6b72f9a952a0949cf47a3a88a48dcbe0",
+  "release": "v0.1.0-preview.2",
+  "packageSha256": "ce68565f6be7df7fe80f6504a194c0111515f61f6ac573b981d6b0e04202fe26",
+  "node": "v24.12.0",
+  "method": "Playwright browser recording: actual command output replayed after execution, followed by interactions with the same fresh offline reports. Waiting time omitted; local consumer path prefixes shortened. No verdict or evidence edits.",
+  "executionDetails": {
+    "installOptions": [
+      "--cache <workspace>/.npm-cache",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "demo": "node <installed-package>/dist/cli.js demo --port 0",
+    "otherCliCommands": "npm exec --offline -- promiseproof ... in fresh per-example child directories"
+  },
+  "video": {
+    "programs": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1280,
+        "height": 800,
+        "pix_fmt": "yuv420p"
+      }
+    ],
+    "format": {
+      "duration": "153.125000",
+      "size": "1829490"
+    },
+    "sha256": "c46d902ccafd091b0c9785f21b4e69217ac047afc0187749458c8745941b8d8e"
+  },
+  "results": [
+    {
+      "example": "simple-form",
+      "runId": "saved-contact-2026-10-14T03-38-31-817Z-b852d10a",
+      "specId": "saved-contact",
+      "revision": 2,
+      "specDigest": "4207fee8ed829392957ecf39ab5a082399579fdda6d2ab9a4ab17185ba42118a",
+      "status": "PASS",
+      "summary": {
+        "PASS": 4,
+        "FAIL": 0,
+        "NOT_VERIFIED": 0,
+        "ERROR": 0
+      },
+      "startedAt": "2026-10-14T03:38:31.818Z",
+      "assertions": [
+        {
+          "id": "absent",
+          "status": "PASS",
+          "expected": {
+            "id": "absent",
+            "description": "This isolated fixture begins without the expected contact",
+            "context": "default",
+            "url": "/api/contacts?email=ada@example.test",
+            "status": 200,
+            "headers": {},
+            "json": {
+              "path": "record",
+              "equals": null
+            },
+            "type": "api"
+          },
+          "observed": {
+            "url": "http://127.0.0.1:52442/api/contacts?email=ada@example.test",
+            "status": 200,
+            "path": "record",
+            "value": null
+          },
+          "attempts": 1
+        },
+        {
+          "id": "ui",
+          "status": "PASS",
+          "expected": {
+            "id": "ui",
+            "description": "The UI confirms success",
+            "context": "default",
+            "locator": {
+              "role": "status",
+              "exact": true
+            },
+            "type": "text",
+            "equals": "Success"
+          },
+          "observed": {
+            "text": "Success"
+          },
+          "attempts": 1
+        },
+        {
+          "id": "persisted",
+          "status": "PASS",
+          "expected": {
+            "id": "persisted",
+            "description": "The API confirms the submitted record independently",
+            "context": "default",
+            "url": "/api/contacts?email=ada@example.test",
+            "status": 200,
+            "headers": {},
+            "json": {
+              "path": "record",
+              "equals": {
+                "name": "Ada Example",
+                "email": "ada@example.test"
+              }
+            },
+            "type": "api"
+          },
+          "observed": {
+            "url": "http://127.0.0.1:52442/api/contacts?email=ada@example.test",
+            "status": 200,
+            "path": "record",
+            "value": {
+              "name": "Ada Example",
+              "email": "ada@example.test"
+            }
+          },
+          "attempts": 1
+        },
+        {
+          "id": "errors",
+          "status": "PASS",
+          "expected": {
+            "id": "errors",
+            "description": "No browser errors were observed",
+            "context": "default",
+            "type": "noErrors"
+          },
+          "observed": {
+            "errors": []
+          },
+          "attempts": 1
+        }
+      ]
+    },
+    {
+      "example": "failing-workflow",
+      "runId": "lying-form-2026-10-14T03-38-37-380Z-a46ccf12",
+      "specId": "lying-form",
+      "revision": 1,
+      "specDigest": "7b0d34b43570dfc590dac8c1420ae4690481a1bedcd9141e5db13c24c311ab93",
+      "status": "FAIL",
+      "summary": {
+        "PASS": 1,
+        "FAIL": 1,
+        "NOT_VERIFIED": 1,
+        "ERROR": 0
+      },
+      "startedAt": "2026-10-14T03:38:37.381Z",
+      "assertions": [
+        {
+          "id": "ui",
+          "status": "PASS",
+          "expected": {
+            "id": "ui",
+            "description": "The UI claims success",
+            "context": "default",
+            "locator": {
+              "role": "status",
+              "exact": true
+            },
+            "type": "text",
+            "equals": "Success"
+          },
+          "observed": {
+            "text": "Success"
+          },
+          "attempts": 1
+        },
+        {
+          "id": "persisted",
+          "status": "FAIL",
+          "expected": {
+            "id": "persisted",
+            "description": "The API must contain the saved contact",
+            "context": "default",
+            "url": "/api/contacts?email=grace@example.test",
+            "status": 200,
+            "headers": {},
+            "json": {
+              "path": "record.email",
+              "equals": "grace@example.test"
+            },
+            "type": "api"
+          },
+          "observed": "API field record.email: expected \"grace@example.test\"; observed missing.",
+          "attempts": 1
+        },
+        {
+          "id": "downstream",
+          "status": "NOT_VERIFIED",
+          "expected": {
+            "id": "downstream",
+            "description": "A downstream record check depends on persistence",
+            "context": "default",
+            "url": "/api/contacts?email=grace@example.test",
+            "status": 200,
+            "headers": {},
+            "json": {
+              "path": "record.name",
+              "equals": "Grace Example"
+            },
+            "type": "api"
+          },
+          "observed": "Dependencies did not pass: persisted",
+          "attempts": 0
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "start": 0.029016700000000013,
+      "title": "01 / Start with a real outcome",
+      "caption": "A success message is useful. Independent evidence tells you whether the outcome happened."
+    },
+    {
+      "start": 7.136894600000001,
+      "title": "02 / Install the downloaded preview",
+      "caption": "Use Node 22.12+. Download preview.2 and compare SHA-256 before installing in a fresh project."
+    },
+    {
+      "start": 17.1676929,
+      "title": "03 / Start the local demo",
+      "caption": "Keep this terminal running. Port 0 chooses a free port; copy the printed URL into init."
+    },
+    {
+      "start": 26.204936899999996,
+      "title": "04 / Initialize the passing example",
+      "caption": "In a second terminal, create the simple-form spec. The generated policy authorizes this exact origin."
+    },
+    {
+      "start": 35.2388762,
+      "title": "05 / Check setup with doctor",
+      "caption": "READY describes setup checks. Doctor does not test application outcomes; verify does."
+    },
+    {
+      "start": 46.270343499999996,
+      "title": "06 / Verify the saved record",
+      "caption": "Run verify on the generated spec. Exit 0 means its recorded assertions passed."
+    },
+    {
+      "start": 55.2929616,
+      "title": "07 / Open the printed report.html",
+      "caption": "Open the printed report path in your browser. This is the actual bundle from the recorded run."
+    },
+    {
+      "start": 65.4256358,
+      "title": "08 / Inspect independent persistence",
+      "caption": "The passing workflow reloads the page and checks the saved contact through the test API."
+    },
+    {
+      "start": 75.29794570000001,
+      "title": "09 / Try the intentional defect",
+      "caption": "Use another fresh directory: init preserves existing files. Select failing-workflow with the same demo URL."
+    },
+    {
+      "start": 86.33461290000001,
+      "title": "10 / Read the actual failure",
+      "caption": "Exit 1 is expected for this deliberately broken fixture. The report preserves the failed persistence check."
+    },
+    {
+      "start": 95.425246,
+      "title": "11 / UI success is only one observation",
+      "caption": "The UI assertion passes: the form really displayed “Success”. That does not prove the record was saved."
+    },
+    {
+      "start": 104.27095320000001,
+      "title": "12 / Compare expected with observed",
+      "caption": "The API check expected the saved email. The recorded response has no contact, so persistence FAILS."
+    },
+    {
+      "start": 116.0777935,
+      "title": "13 / Understand NOT_VERIFIED",
+      "caption": "The downstream check has zero attempts because persistence failed. Missing evidence is not a PASS."
+    },
+    {
+      "start": 124.9127087,
+      "title": "14 / Choose a concrete next check",
+      "caption": "Open Next steps. Follow the linked observation and investigate the app without weakening the expected outcome."
+    },
+    {
+      "start": 134.994602,
+      "title": "15 / Replay and inspect local evidence",
+      "caption": "Commands and trace tools shows setup, replay and trace commands for this run. Share the whole evidence folder."
+    },
+    {
+      "start": 144.06490029999998,
+      "title": "16 / Apply it to your own test app",
+      "caption": "Keep real acceptance criteria and exact authorized origins. Fix the app, restore test data, then verify again."
+    },
+    {
+      "start": 153.10875209999998,
+      "title": "End",
+      "caption": ""
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+WEBVTT
+
+1
+00:00:00.029 --> 00:00:07.137
+A success message is useful. Independent evidence tells you whether the outcome happened.
+
+2
+00:00:07.137 --> 00:00:17.168
+Use Node 22.12+. Download preview.2 and compare SHA-256 before installing in a fresh project.
+
+3
+00:00:17.168 --> 00:00:26.205
+Keep this terminal running. Port 0 chooses a free port; copy the printed URL into init.
+
+4
+00:00:26.205 --> 00:00:35.239
+In a second terminal, create the simple-form spec. The generated policy authorizes this exact origin.
+
+5
+00:00:35.239 --> 00:00:46.270
+READY describes setup checks. Doctor does not test application outcomes; verify does.
+
+6
+00:00:46.270 --> 00:00:55.293
+Run verify on the generated spec. Exit 0 means its recorded assertions passed.
+
+7
+00:00:55.293 --> 00:01:05.426
+Open the printed report path in your browser. This is the actual bundle from the recorded run.
+
+8
+00:01:05.426 --> 00:01:15.298
+The passing workflow reloads the page and checks the saved contact through the test API.
+
+9
+00:01:15.298 --> 00:01:26.335
+Use another fresh directory: init preserves existing files. Select failing-workflow with the same demo URL.
+
+10
+00:01:26.335 --> 00:01:35.425
+Exit 1 is expected for this deliberately broken fixture. The report preserves the failed persistence check.
+
+11
+00:01:35.425 --> 00:01:44.271
+The UI assertion passes: the form really displayed “Success”. That does not prove the record was saved.
+
+12
+00:01:44.271 --> 00:01:56.078
+The API check expected the saved email. The recorded response has no contact, so persistence FAILS.
+
+13
+00:01:56.078 --> 00:02:04.913
+The downstream check has zero attempts because persistence failed. Missing evidence is not a PASS.
+
+14
+00:02:04.913 --> 00:02:14.995
+Open Next steps. Follow the linked observation and investigate the app without weakening the expected outcome.
+
+15
+00:02:14.995 --> 00:02:24.065
+Commands and trace tools shows setup, replay and trace commands for this run. Share the whole evidence folder.
+
+16
+00:02:24.065 --> 00:02:33.109
+Keep real acceptance criteria and exact authorized origins. Fix the app, restore test data, then verify again.

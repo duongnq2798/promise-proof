@@ -2,6 +2,8 @@
 
 You need Node.js 22.12 or newer, npm and an authorized test application. Installing packages and Chromium requires a network connection; local verification does not require an account or model key.
 
+[Watch the first-run video](media/first-run.mp4) with visible English captions, or read its [chapters, transcript and commands](video-walkthrough.md). It demonstrates the installed preview.2 workflow and the difference between UI success and independently verified persistence. The [offline player](media/first-run.html) works from the local documentation folder.
+
 ## 1. Install from the source repository
 
 ```sh

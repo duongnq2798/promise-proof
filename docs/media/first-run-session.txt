@@ -1,0 +1,78 @@
+Actual installed preview.2 command output. Local consumer path prefixes shortened; no output values or verdicts rewritten. npm cache/no-audit/no-fund installation options omitted from screen commands; provenance lists them. Demo was started through the installed Node entrypoint equivalent to npm exec, and terminated after capture.
+
+$ npm init -y
+Wrote to package.json:
+
+{
+  "name": "consumer-recorded",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
+
+
+
+
+[exit 0]
+
+$ npm install ./promiseproof-local-0.1.0.tgz
+
+added 6 packages in 3s
+
+[exit 0]
+
+$ npm exec playwright install chromium
+
+[exit 0]
+
+$ npm exec --offline -- promiseproof demo --port 0
+PromiseProof demo: http://127.0.0.1:52442
+[long-running demo; stopped after verification]
+
+$ npm exec --offline -- promiseproof init --example simple-form --base-url http://127.0.0.1:52442
+Created .promiseproof/config.json
+Created .promiseproof/example.json
+Bundled examples target the synthetic demo. Match its port to --base-url; use a fresh directory to choose another example. Existing files stay unchanged. Next: promiseproof doctor --spec .promiseproof/example.json, then promiseproof verify .promiseproof/example.json. For your own app, edit the acceptance criteria.
+
+[exit 0]
+
+$ npm exec --offline -- promiseproof doctor --spec .promiseproof/example.json
+OK Node.js [NODE_JS]: v24.12.0
+OK Configuration [CONFIGURATION]: 1 exact authorized origins; test environment.
+OK Specification [SPECIFICATION]: Versioned specification is valid.
+OK Target policy [TARGET_POLICY]: Base URL and available static/environment URL references are authorized.
+OK Evidence policy [EVIDENCE_POLICY]: Configured evidence respects credential-reference constraints.
+OK Evidence directory [EVIDENCE_DIRECTORY]: Write and cleanup verified.
+OK Chromium [CHROMIUM]: Launch and shutdown verified; no application request made.
+Setup ready for the checks performed. Application outcomes have not been verified.
+Next: run promiseproof verify <spec.json> --config <policy.json> after setup is ready.
+
+[exit 0]
+
+$ npm exec --offline -- promiseproof verify .promiseproof/example.json
+PASS · A submitted contact is saved and remains available after reload
+Assertions: 4 passed, 0 failed, 0 not verified, 0 errors
+Report: simple-form\.promiseproof\runs\saved-contact-2026-10-14T03-38-31-817Z-b852d10a\report.html
+
+[exit 0]
+
+$ npm exec --offline -- promiseproof init --example failing-workflow --base-url http://127.0.0.1:52442
+Created .promiseproof/config.json
+Created .promiseproof/example.json
+Bundled examples target the synthetic demo. Match its port to --base-url; use a fresh directory to choose another example. Existing files stay unchanged. Next: promiseproof doctor --spec .promiseproof/example.json, then promiseproof verify .promiseproof/example.json. For your own app, edit the acceptance criteria.
+
+[exit 0]
+
+$ npm exec --offline -- promiseproof verify .promiseproof/example.json
+FAIL · A successful form submission actually saves the contact
+Assertions: 1 passed, 1 failed, 1 not verified, 0 errors
+Report: failing-workflow\.promiseproof\runs\lying-form-2026-10-14T03-38-37-380Z-a46ccf12\report.html
+
+[exit 1]

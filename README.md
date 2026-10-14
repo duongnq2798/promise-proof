@@ -12,6 +12,8 @@ The report uses a compact verification workspace: expandable workflow steps, an 
 
 Start with the [step-by-step first-run guide](docs/getting-started.md). The doctor command now checks spec/policy compatibility and gives repair actions for setup problems; add `--json` for structured agent diagnostics. READY means setup checks passed, with `outcomesVerified: false` until you run verify.
 
+Prefer a video? [Watch the first-run walkthrough](docs/media/first-run.mp4): install preview.2, run demo/init/doctor/verify, then investigate the deliberate persistence defect. It includes visible English captions. See [chapters, transcript and copyable commands](docs/video-walkthrough.md), or open the [offline video player](docs/media/first-run.html) from your local checkout.
+
 An unsuccessful report now offers contextual **Next check** guidance and a **Next steps** section with evidence links, prerequisite navigation and local doctor/replay/trace commands. See the [real next-steps preview](docs/report-next-steps.png). Suggestions guide investigation while retaining the original observations and verdict.
 
 ## Try it locally
