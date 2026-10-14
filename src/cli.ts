@@ -10,13 +10,27 @@ import { redact } from './security.js';
 import { exitCode } from './result.js';
 
 async function readJson(file: string): Promise<unknown> {
+  let content: string;
   try {
-    const content = await readFile(file, 'utf8');
-    if (Buffer.byteLength(content) > 1024 * 1024)
-      throw new Error('JSON input exceeds 1 MiB.');
-    return JSON.parse(content) as unknown;
+    content = await readFile(file, 'utf8');
   } catch (error) {
-    throw new ConfigurationError(`Cannot read ${file}: ${errorMessage(error)}`);
+    const missing = (error as NodeJS.ErrnoException).code === 'ENOENT';
+    throw new ConfigurationError(
+      missing
+        ? `Input file ${file} was not found. Check the path relative to the current directory.`
+        : `Cannot read input file ${file}. Check that the path is a readable file and that you have permission to access it.`,
+    );
+  }
+  if (Buffer.byteLength(content) > 1024 * 1024)
+    throw new ConfigurationError(
+      `JSON input ${file} exceeds 1 MiB. Use a smaller input file.`,
+    );
+  try {
+    return JSON.parse(content) as unknown;
+  } catch {
+    throw new ConfigurationError(
+      `Invalid JSON in ${file}. Check syntax, including quotes, commas and brackets; input contents are withheld.`,
+    );
   }
 }
 const program = new Command()

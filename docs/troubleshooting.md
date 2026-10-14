@@ -38,3 +38,9 @@ Doctor exits **2** for invalid/missing inputs or incompatible policy/spec, **3**
 Only JSON specs are supported. YAML, regex expectations and custom code are deferred. No sleeps, hidden retries, hosted dashboard or model key are needed. Open traces with local Playwright show-trace; verdicts live in result.json/report.html.
 
 Credential literals are checked conservatively against the serialized spec. Very short/common environment values may collide with ordinary spec text and be rejected; use dedicated high-entropy test secrets.
+
+## Invalid input before a run
+
+`verify`, `list` and `report` return exit **2** for an unreadable file, malformed JSON or an input larger than 1 MiB. The message names the file and gives a next action. A missing path is resolved relative to your terminal's current directory. Use a readable file; for invalid JSON, check quotes, commas and matching brackets in your editor. Parser details and malformed file contents are withheld from terminal output. File paths remain visible, so avoid placing sensitive values in filenames.
+
+No application outcome has been tested at this stage. Fix the input, run doctor with the relevant spec/policy, then rerun verify. Share the safe error message and a minimal sanitized reproduction when requesting help; keep credentials in environment references.

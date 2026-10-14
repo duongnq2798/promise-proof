@@ -573,6 +573,59 @@ describe('built CLI', () => {
     expect(result.code).toBe(2);
     expect(result.stderr).toContain('Invalid configuration');
   });
+  it('verify withholds malformed spec contents and explains how to repair JSON', async () => {
+    await files(await example('simple-form'));
+    const marker = 'private-canary-91';
+    await writeFile(path.join(workspace, 'spec.json'), marker);
+    let requests = 0;
+    const count = () => requests++;
+    server.on('request', count);
+    try {
+      const result = await call([
+        'verify',
+        'spec.json',
+        '--config',
+        'config.json',
+      ]);
+      expect(result.code).toBe(2);
+      expect(result.stdout + result.stderr).not.toContain(marker);
+      expect(result.stderr).toContain('spec.json');
+      expect(result.stderr).toMatch(/JSON/);
+      expect(result.stderr).toMatch(/check|fix/i);
+      expect(requests).toBe(0);
+    } finally {
+      server.off('request', count);
+    }
+  });
+  it.each([
+    ['verify', 'spec.json', '--config', 'malformed-policy.json'],
+    ['list', '--config', 'malformed-policy.json'],
+    ['report', 'recorded-run', '--config', 'malformed-policy.json'],
+  ])('withholds malformed policy contents for %s', async (...args) => {
+    await files(await example('simple-form'));
+    const marker = 'private-canary-92';
+    await writeFile(path.join(workspace, 'malformed-policy.json'), marker);
+    const result = await call(args);
+    expect(result.code).toBe(2);
+    expect(result.stdout + result.stderr).not.toContain(marker);
+    expect(result.stderr).toContain('malformed-policy.json');
+    expect(result.stderr).toMatch(/JSON/);
+    expect(result.stderr).toMatch(/check|fix/i);
+  });
+  it('points missing input files to a path repair without a runtime verdict', async () => {
+    await files(await example('simple-form'));
+    const result = await call([
+      'verify',
+      'missing-workflow.json',
+      '--config',
+      'config.json',
+    ]);
+    expect(result.code).toBe(2);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toContain('missing-workflow.json');
+    expect(result.stderr).toMatch(/not found/i);
+    expect(result.stderr).toMatch(/check.*path/i);
+  });
   it('returns 0 for real success, emits JSON, and locates the report', async () => {
     await files(await example('simple-form'));
     const result = await call([

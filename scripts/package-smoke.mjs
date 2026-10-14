@@ -68,6 +68,26 @@ try {
       allowedOrigins: [baseUrl],
     }),
   );
+  const privateMarker = 'private-canary-93';
+  await writeFile(path.join(directory, 'malformed.json'), privateMarker);
+  let rejectedInput;
+  try {
+    await command(
+      process.execPath,
+      [cli, 'verify', 'malformed.json', '--config', 'policy.json'],
+      { cwd: directory },
+    );
+  } catch (error) {
+    rejectedInput = error;
+  }
+  if (
+    !rejectedInput ||
+    rejectedInput.code !== 2 ||
+    (rejectedInput.stdout + rejectedInput.stderr).includes(privateMarker) ||
+    !rejectedInput.stderr.includes('JSON')
+  )
+    throw new Error('Packaged CLI did not withhold malformed input safely');
+  console.log('Packaged invalid JSON: exit 2; input contents withheld');
   for (const [name, expectedCode] of [
     ['simple-form', 0],
     ['failing-workflow', 1],
@@ -155,7 +175,7 @@ try {
   await command(process.execPath, ['exports-smoke.mjs'], { cwd: directory });
   await readFile(path.join(installed, 'ARCHITECTURE.md'));
   console.log(
-    'Package smoke PASS: init, doctor, exports, agent instructions, three real browser workflows; ' +
+    'Package smoke PASS: init, private input errors, doctor, exports, agent instructions, three real browser workflows; ' +
       directory,
   );
 } finally {
