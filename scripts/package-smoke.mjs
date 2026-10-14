@@ -106,27 +106,18 @@ try {
     ['failing-workflow', 1],
     ['invitation-flow', 0],
   ]) {
-    const spec = JSON.parse(
-      await readFile(
-        path.join(installed, 'examples', name, 'spec.json'),
-        'utf8',
-      ),
+    const workflowDirectory = path.join(directory, name);
+    await mkdir(workflowDirectory);
+    await command(
+      process.execPath,
+      [cli, 'init', '--example', name, '--base-url', baseUrl],
+      { cwd: workflowDirectory },
     );
-    spec.baseUrl = baseUrl;
-    await writeFile(path.join(directory, 'spec.json'), JSON.stringify(spec));
     if (name === 'simple-form') {
       const { stdout: doctorOutput } = await command(
         process.execPath,
-        [
-          cli,
-          'doctor',
-          '--spec',
-          'spec.json',
-          '--config',
-          'policy.json',
-          '--json',
-        ],
-        { cwd: directory },
+        [cli, 'doctor', '--spec', '.promiseproof/example.json', '--json'],
+        { cwd: workflowDirectory },
       );
       const diagnosis = JSON.parse(doctorOutput);
       if (
@@ -144,8 +135,8 @@ try {
     try {
       ({ stdout } = await command(
         process.execPath,
-        [cli, 'verify', 'spec.json', '--config', 'policy.json', '--json'],
-        { cwd: directory },
+        [cli, 'verify', '.promiseproof/example.json', '--json'],
+        { cwd: workflowDirectory },
       ));
     } catch (error) {
       code = error.code;
@@ -188,7 +179,7 @@ try {
   await command(process.execPath, ['exports-smoke.mjs'], { cwd: directory });
   await readFile(path.join(installed, 'ARCHITECTURE.md'));
   console.log(
-    'Package smoke PASS: demo, init, private input errors, doctor, exports, agent instructions, three real browser workflows; ' +
+    'Package smoke PASS: demo, init examples, private input errors, doctor, exports, agent instructions, three real browser workflows; ' +
       directory,
   );
 } finally {

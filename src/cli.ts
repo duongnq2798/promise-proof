@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-import { Command, CommanderError } from 'commander';
+import { Command, CommanderError, Option } from 'commander';
 import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import path from 'node:path';
 import type { Server } from 'node:http';
 import { runDoctor } from './doctor.js';
 import { verify, errorMessage } from './runner.js';
-import { ConfigurationError, parseConfig } from './spec.js';
+import { ConfigurationError, parseConfig, parseSpec } from './spec.js';
 import { redact } from './security.js';
 import { exitCode } from './result.js';
 
@@ -123,15 +123,24 @@ program
     'Authorized local test application',
     'http://127.0.0.1:4173',
   )
-  .action(async (options: { baseUrl: string }) => {
+  .addOption(
+    new Option('--example <name>', 'Starter or runnable synthetic demo example')
+      .choices([
+        'starter',
+        'simple-form',
+        'failing-workflow',
+        'invitation-flow',
+      ])
+      .default('starter'),
+  )
+  .action(async (options: { baseUrl: string; example: string }) => {
     const origin = new URL(options.baseUrl).origin;
     const config = parseConfig({
       schemaVersion: '1',
       allowedOrigins: [origin],
       environment: 'test',
     });
-    await mkdir('.promiseproof', { recursive: true });
-    const example = {
+    let example: unknown = {
       schemaVersion: '1',
       id: 'first-outcome',
       revision: 1,
@@ -155,6 +164,24 @@ program
         },
       ],
     };
+    if (options.example !== 'starter') {
+      const bundled = JSON.parse(
+        await readFile(
+          new URL(`../examples/${options.example}/spec.json`, import.meta.url),
+          'utf8',
+        ),
+      ) as Record<string, unknown>;
+      delete bundled.$schema;
+      const selected = parseSpec({ ...bundled, baseUrl: options.baseUrl });
+      selected.preconditions = selected.preconditions.map((condition) =>
+        condition.replace(
+          'Run npm run demo.',
+          'Run promiseproof demo at the configured base URL.',
+        ),
+      );
+      example = selected;
+    }
+    await mkdir('.promiseproof', { recursive: true });
     for (const [file, value] of [
       [configPath, config],
       ['.promiseproof/example.json', example],
@@ -172,7 +199,9 @@ program
       }
     }
     console.log(
-      'Start your test app, edit .promiseproof/example.json, then run promiseproof verify .promiseproof/example.json.',
+      options.example === 'starter'
+        ? 'Start your test app, edit .promiseproof/example.json, then run promiseproof verify .promiseproof/example.json.'
+        : 'Bundled examples target the synthetic demo. Match its port to --base-url; use a fresh directory to choose another example. Existing files stay unchanged. Next: promiseproof doctor --spec .promiseproof/example.json, then promiseproof verify .promiseproof/example.json. For your own app, edit the acceptance criteria.',
     );
   });
 program

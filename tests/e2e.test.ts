@@ -200,7 +200,6 @@ describe('real Chromium verification', () => {
   it('a second response assertion cannot reuse the first action response', async () => {
     const input = await example('simple-form');
     input.evidence = {};
-    input.timeoutMs = 500;
     input.steps.splice(
       input.steps.findIndex((s: { id: string }) => s.id === 'ui') + 1,
       0,
@@ -222,6 +221,7 @@ describe('real Chromium verification', () => {
       {
         id: 'missing-response',
         type: 'response',
+        timeoutMs: 500,
         after: 'edit',
         description: 'No new response exists',
         url: '/api/contacts',
@@ -230,9 +230,28 @@ describe('real Chromium verification', () => {
     );
     const { result } = await verify(input, policy());
     expect(result.status).toBe('FAIL');
-    expect(result.steps.find((s) => s.id === 'missing-response')?.status).toBe(
-      'FAIL',
-    );
+    for (const id of ['submit', 'network', 'edit']) {
+      expect(
+        result.steps.find((step) => step.id === id)?.status,
+        JSON.stringify(
+          result.steps.map(({ id, status, observed }) => ({
+            id,
+            status,
+            observed,
+          })),
+        ),
+      ).toBe('PASS');
+    }
+    expect(
+      result.steps.find((s) => s.id === 'missing-response')?.status,
+      JSON.stringify(
+        result.steps.map(({ id, status, observed }) => ({
+          id,
+          status,
+          observed,
+        })),
+      ),
+    ).toBe('FAIL');
   });
   it('a secret equal to PASS cannot corrupt protocol verdicts', async () => {
     process.env.PP_COLLISION = 'PASS';

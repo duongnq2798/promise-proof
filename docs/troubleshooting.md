@@ -1,5 +1,7 @@
 # Troubleshooting
 
+Current builds support `init --example simple-form`, `failing-workflow` or `invitation-flow` for the bundled synthetic fixture; `starter` is the default. Unsupported choices exit 2 before creating files. Selecting a preset does not overwrite an existing spec or policy: use a fresh project directory to compare examples, or deliberately edit your existing contract. Match --base-url to the running demo's port. Templates preserve outcome assertions and omit the old package-relative editor-schema link.
+
 For the bundled synthetic fixture, current builds provide `promiseproof demo --port 4173` (from a checkout: `node dist/cli.js demo`). An occupied port returns runtime exit 3 with a --port hint; stop your own conflicting test app or select another port and update spec/policy to match. Invalid port syntax/range returns configuration exit 2. The demo binds only to loopback and stops with Ctrl+C. Preview.1 uses the direct fixture command from its release notes.
 
 In a generated report, use **View next steps** to start with the relevant recorded observation. **Next check** separates API/UI checks, unmet prerequisites, cleanup and runtime failures. Prerequisite links reflect the executed contract; independent steps do not inherit a preceding failure. Expand **Commands and trace tools** for local doctor, replay and safe ZIP trace instructions. Keep the bundle's screenshots/traces and original acceptance criterion intact.

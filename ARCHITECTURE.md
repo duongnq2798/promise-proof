@@ -6,6 +6,8 @@ Contact demo records are scoped to a synthetic fixture cookie. Each new context 
 
 The demo CLI dynamically loads the packaged fixture without changing verification adapters. It binds exclusively to 127.0.0.1, validates --port (0 means an assigned free port), describes synthetic in-memory data and reports occupied ports without replacing listeners. SIGINT/SIGTERM stop the demo and close fixture connections. Package smoke starts the installed demo CLI, then verifies all three workflows against that process instead of a source-checkout fixture.
 
+Init optionally selects a whitelisted bundled example (simple-form, failing-workflow, invitation-flow); starter remains the default for custom apps. The selected spec is validated before file creation, receives the requested baseUrl, omits the bundle-relative editor-schema path and updates only the demo-start wording of preconditions. Assertions/expected values remain intact. Existing spec/policy files are preserved independently with exclusive creation. Package smoke initializes each example in a fresh consumer directory and verifies it through the default generated policy.
+
 ```text
 src/spec.ts      strict contracts, semantic validation and editor schema
 src/security.ts  origins, remote opt-in, references and redaction

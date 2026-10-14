@@ -39,7 +39,9 @@ Expected verification exit codes: **0**, **1**, **0**. The failure is intentiona
 
 Linux installation may require npm exec playwright install --with-deps chromium. The initial commit's [six-job CI run](https://github.com/duongnq2798/promise-proof/actions/runs/38428830158) passed on Windows, Linux and macOS with Node 22/24, including the real examples and packed consumer smoke. Follow-up changes still require their own checks.
 
-This project is **not published to npm**. Do not use a public npx promiseproof command. Download the installable tarball from the [GitHub preview release](https://github.com/duongnq2798/promise-proof/releases/tag/v0.1.0-preview.1) and follow its [installation instructions](docs/releases/v0.1.0-preview.1.md), or run npm pack in this checkout. The provisional private package name is promiseproof-local.
+This project is **not published to npm**. Do not use a public npx promiseproof command. Download the installable tarball from [GitHub releases](https://github.com/duongnq2798/promise-proof/releases). Preview.2 supports the [demo and runnable-init quick start](docs/releases/v0.1.0-preview.2.md); preview.1 retains its [original instructions](docs/releases/v0.1.0-preview.1.md). You can also run npm pack in this checkout. The provisional private package name is promiseproof-local.
+
+For a runnable synthetic outcome in a fresh project, use `promiseproof init --example simple-form`, then doctor/verify `.promiseproof/example.json` while the bundled demo runs. Other presets are `failing-workflow` and `invitation-flow`. Plain init remains a starter for your own acceptance criteria. Existing files are preserved when switching presets.
 
 ## A specification, not a model verdict
 
@@ -102,7 +104,7 @@ Use complete [examples](examples) and the generated [JSON Schema](schema/spec.sc
 
 | Command                                         | Purpose                                                          |
 | ----------------------------------------------- | ---------------------------------------------------------------- |
-| init [--base-url URL]                           | Create policy and starter spec; preserve existing files          |
+| init [--base-url URL] [--example NAME]          | Create policy and starter/demo spec; preserve existing files     |
 | demo [--port NUMBER]                            | Run the synthetic loopback fixture; default 4173, 0 picks a port |
 | verify SPEC --config POLICY [--json] [--headed] | Execute a validated specification                                |
 | list --config POLICY                            | List saved run ids                                               |

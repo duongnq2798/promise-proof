@@ -87,7 +87,7 @@ These commands use `.promiseproof/config.json` by default. Start your test app b
 
 ## Install the CLI in another project
 
-Use the tarball from the [GitHub preview release](https://github.com/duongnq2798/promise-proof/releases/tag/v0.1.0-preview.1), or run `npm pack` in this checkout. The [preview instructions](releases/v0.1.0-preview.1.md) cover running the packaged examples without cloning the repository. In the consuming project, install the downloaded/local tarball:
+Use a tarball from [GitHub releases](https://github.com/duongnq2798/promise-proof/releases), or run `npm pack` in this checkout. Follow the [preview.2 instructions](releases/v0.1.0-preview.2.md) for demo/runnable init, or the [preview.1 instructions](releases/v0.1.0-preview.1.md) for that older immutable asset. In the consuming project, install the downloaded/local tarball:
 
 ```sh
 npm install /absolute/path/to/promiseproof-local-0.1.0.tgz
@@ -97,4 +97,4 @@ npm exec --offline -- promiseproof init --base-url http://127.0.0.1:3000
 
 Use the actual tarball path on your system. The installed package exposes the executable without a global link. Browser installation is still required. Use the same doctor/spec/policy workflow through the installed executable.
 
-Builds after v0.1.0-preview.1 also support `npm exec --offline -- promiseproof demo` to start the packaged fixture. The tagged preview.1 retains the direct fixture command in its release notes; its assets do not change with main-branch development.
+Preview.2/current builds support `npm exec --offline -- promiseproof demo` to start the packaged fixture. In a second terminal, use `npm exec --offline -- promiseproof init --example simple-form`, then doctor/verify `.promiseproof/example.json`. To try failing-workflow or invitation-flow, select that preset in a fresh project directory; init never overwrites an existing spec/policy. These criteria target the synthetic demo, so edit them deliberately before testing your own app. Preview.1 retains its direct fixture command and lacks runnable-init presets.
