@@ -7,9 +7,9 @@ import {
 } from 'node:fs/promises';
 import path from 'node:path';
 import { once } from 'node:events';
-import { execFile } from 'node:child_process';
+import { createInterface } from 'node:readline';
+import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
-import { createDemoServer } from '../examples/server.mjs';
 
 const archive = process.argv[2];
 if (!archive)
@@ -45,11 +45,24 @@ await command(
 );
 const installed = path.join(directory, 'node_modules/promiseproof-local');
 const cli = path.join(installed, 'dist/cli.js');
-const server = createDemoServer();
-server.listen(0, '127.0.0.1');
-await once(server, 'listening');
-const baseUrl = 'http://127.0.0.1:' + server.address().port;
+const demo = spawn(process.execPath, [cli, 'demo', '--port', '0'], {
+  cwd: directory,
+  stdio: ['ignore', 'pipe', 'pipe'],
+});
+const demoClosed = once(demo, 'close');
+const demoLines = createInterface({ input: demo.stdout });
+let demoError = '';
+demo.stderr.on('data', (chunk) => (demoError += String(chunk)));
 try {
+  const [line] = await Promise.race([
+    once(demoLines, 'line', { signal: AbortSignal.timeout(15000) }),
+    demoClosed.then(() => {
+      throw new Error('Packaged demo exited before readiness: ' + demoError);
+    }),
+  ]);
+  const baseUrl = String(line).match(/http:\/\/127\.0\.0\.1:\d+/)?.[0];
+  if (!baseUrl) throw new Error('Packaged demo did not report a loopback URL');
+  console.log('Packaged demo: real installed fixture started on loopback');
   const bin = await command(
     process.execPath,
     [npmExecutable, 'exec', '--offline', '--', 'promiseproof', '--version'],
@@ -175,9 +188,11 @@ try {
   await command(process.execPath, ['exports-smoke.mjs'], { cwd: directory });
   await readFile(path.join(installed, 'ARCHITECTURE.md'));
   console.log(
-    'Package smoke PASS: init, private input errors, doctor, exports, agent instructions, three real browser workflows; ' +
+    'Package smoke PASS: demo, init, private input errors, doctor, exports, agent instructions, three real browser workflows; ' +
       directory,
   );
 } finally {
-  await new Promise((resolve) => server.close(resolve));
+  demoLines.close();
+  if (demo.exitCode === null && demo.signalCode === null) demo.kill('SIGTERM');
+  await demoClosed;
 }

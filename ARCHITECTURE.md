@@ -4,6 +4,8 @@ One Node.js ESM package, strict TypeScript, Chromium via Playwright, Zod validat
 
 Contact demo records are scoped to a synthetic fixture cookie. Each new context begins empty; an explicit absence assertion precedes submission. Reload preserves that context's record. This prevents older runs from satisfying a new creation check. Storage is in-memory, not durable across fixture-server restarts.
 
+The demo CLI dynamically loads the packaged fixture without changing verification adapters. It binds exclusively to 127.0.0.1, validates --port (0 means an assigned free port), describes synthetic in-memory data and reports occupied ports without replacing listeners. SIGINT/SIGTERM stop the demo and close fixture connections. Package smoke starts the installed demo CLI, then verifies all three workflows against that process instead of a source-checkout fixture.
+
 ```text
 src/spec.ts      strict contracts, semantic validation and editor schema
 src/security.ts  origins, remote opt-in, references and redaction
@@ -15,7 +17,7 @@ src/report-guidance.ts  pure next-check suggestions from recorded status/type/de
 src/report-icons.ts  fixed inline SVG icon set
 src/report-styles.ts  loads the local report stylesheet for inline embedding
 assets/         report CSS, embedded Geist font and SIL font license
-src/cli.ts       initialization, verification, diagnostics and agent export
+src/cli.ts       initialization, verification, diagnostics, local demo and agent export
 src/doctor.ts    structured setup diagnostics and actionable repair guidance
 src/index.ts     public library exports
 examples/       form, broken persistence and invitation fixtures

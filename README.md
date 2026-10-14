@@ -22,7 +22,7 @@ Node.js 22.12 or newer. From this checkout:
 npm ci
 npm run build
 npm exec playwright install chromium
-npm run demo
+node dist/cli.js demo
 ```
 
 Keep the demo running. In another terminal:
@@ -100,14 +100,15 @@ Use complete [examples](examples) and the generated [JSON Schema](schema/spec.sc
 
 ## Commands and verdicts
 
-| Command                                         | Purpose                                                        |
-| ----------------------------------------------- | -------------------------------------------------------------- |
-| init [--base-url URL]                           | Create policy and starter spec; preserve existing files        |
-| verify SPEC --config POLICY [--json] [--headed] | Execute a validated specification                              |
-| list --config POLICY                            | List saved run ids                                             |
-| report RUN_ID --config POLICY                   | Print the local HTML report path                               |
-| doctor --config POLICY [--spec SPEC]            | Check Node, Chromium, policy, credentials and evidence writes  |
-| agent [--output NEW_FILE]                       | Read/export agent instructions without changing agent settings |
+| Command                                         | Purpose                                                          |
+| ----------------------------------------------- | ---------------------------------------------------------------- |
+| init [--base-url URL]                           | Create policy and starter spec; preserve existing files          |
+| demo [--port NUMBER]                            | Run the synthetic loopback fixture; default 4173, 0 picks a port |
+| verify SPEC --config POLICY [--json] [--headed] | Execute a validated specification                                |
+| list --config POLICY                            | List saved run ids                                               |
+| report RUN_ID --config POLICY                   | Print the local HTML report path                                 |
+| doctor --config POLICY [--spec SPEC]            | Check Node, Chromium, policy, credentials and evidence writes    |
+| agent [--output NEW_FILE]                       | Read/export agent instructions without changing agent settings   |
 
 Assertions use PASS, FAIL, NOT_VERIFIED, ERROR. Failed actions also prevent overall PASS. Each step depends on its predecessor by default; explicit dependencies point backward. Exit **0** = PASS; **1** = failed/incomplete; **2** = invalid configuration/usage; **3** = runtime/infrastructure error. Errors dominate failures; failures dominate missing evidence.
 

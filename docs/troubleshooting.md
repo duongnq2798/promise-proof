@@ -1,5 +1,7 @@
 # Troubleshooting
 
+For the bundled synthetic fixture, current builds provide `promiseproof demo --port 4173` (from a checkout: `node dist/cli.js demo`). An occupied port returns runtime exit 3 with a --port hint; stop your own conflicting test app or select another port and update spec/policy to match. Invalid port syntax/range returns configuration exit 2. The demo binds only to loopback and stops with Ctrl+C. Preview.1 uses the direct fixture command from its release notes.
+
 In a generated report, use **View next steps** to start with the relevant recorded observation. **Next check** separates API/UI checks, unmet prerequisites, cleanup and runtime failures. Prerequisite links reflect the executed contract; independent steps do not inherit a preceding failure. Expand **Commands and trace tools** for local doctor, replay and safe ZIP trace instructions. Keep the bundle's screenshots/traces and original acceptance criterion intact.
 
 Start with `promiseproof doctor --spec <spec.json> --config <policy.json>`. From the checkout, use `node dist/cli.js` in place of `promiseproof`. Each failed diagnostic has a stable code and a next action; add `--json` for an agent or script. Doctor checks setup without contacting the application or proving its outcomes.

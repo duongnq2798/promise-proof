@@ -3,6 +3,7 @@ import { Command, CommanderError } from 'commander';
 import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import path from 'node:path';
+import type { Server } from 'node:http';
 import { runDoctor } from './doctor.js';
 import { verify, errorMessage } from './runner.js';
 import { ConfigurationError, parseConfig } from './spec.js';
@@ -39,6 +40,56 @@ const program = new Command()
   .version('0.1.0')
   .exitOverride();
 const configPath = '.promiseproof/config.json';
+program
+  .command('demo')
+  .description('Run the bundled synthetic test app on loopback only')
+  .option('--port <number>', 'Local port; 0 selects an available port', '4173')
+  .action(async (options: { port: string }) => {
+    const port = Number(options.port);
+    if (!/^\d{1,5}$/.test(options.port) || port > 65535)
+      throw new ConfigurationError(
+        'Demo port must be an integer from 0 to 65535. Use --port 4173 or --port 0.',
+      );
+    const { createDemoServer } = (await import(
+      new URL('../examples/server.mjs', import.meta.url).href
+    )) as { createDemoServer: () => Server };
+    const server = createDemoServer();
+    await new Promise<void>((resolve, reject) => {
+      const failed = (error: NodeJS.ErrnoException) => {
+        server.off('listening', ready);
+        reject(
+          new Error(
+            error.code === 'EADDRINUSE'
+              ? `Demo port ${port} is already in use. Stop the other local app or choose another --port.`
+              : 'Cannot start the loopback demo. Check the local port and process permissions.',
+          ),
+        );
+      };
+      const ready = () => {
+        server.off('error', failed);
+        resolve();
+      };
+      server.once('error', failed);
+      server.once('listening', ready);
+      server.listen(port, '127.0.0.1');
+    });
+    const stop = () => {
+      server.close();
+      server.closeAllConnections();
+      process.off('SIGINT', stop);
+      process.off('SIGTERM', stop);
+    };
+    process.once('SIGINT', stop);
+    process.once('SIGTERM', stop);
+    const address = server.address();
+    if (!address || typeof address === 'string') {
+      stop();
+      throw new Error('Demo did not bind a local TCP port.');
+    }
+    console.log(
+      `PromiseProof demo: http://127.0.0.1:${address.port}\nSynthetic test data only; in-memory records reset on restart. Keep this terminal running; stop with Ctrl+C.`,
+    );
+  });
 program
   .command('agent')
   .description(

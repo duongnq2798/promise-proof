@@ -2,6 +2,8 @@
 
 ## 0.1.0 — unreleased
 
+- Main-branch follow-up after GitHub preview.1: installed demo command with loopback-only synthetic data, port repair hints and process shutdown; package smoke uses that installed fixture.
+
 - Keep malformed JSON contents out of verify/list/report errors; explain file-path, access, syntax and input-size repairs while preserving configuration exit 2.
 
 - Contextual next-check guidance, real prerequisite links and safe local diagnostic/replay/trace tools in unsuccessful reports.

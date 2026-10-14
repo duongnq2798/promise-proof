@@ -19,10 +19,12 @@ PromiseProof is not published to npm. Do not run an unqualified public `npx prom
 ## 2. Start the example application
 
 ```sh
-npm run demo
+node dist/cli.js demo
 ```
 
 Keep this terminal running. The fixture listens on `http://127.0.0.1:4173`. Its accounts and records are synthetic; data is held in memory.
+
+Stop with Ctrl+C. If 4173 is occupied, choose another port with `demo --port 4174`; match the example spec baseUrl and exact policy origin to that port. `--port 0` prints an assigned free port. Demo does not create specs, policies or verdicts.
 
 ## 3. Check setup in a second terminal
 
@@ -94,3 +96,5 @@ npm exec --offline -- promiseproof init --base-url http://127.0.0.1:3000
 ```
 
 Use the actual tarball path on your system. The installed package exposes the executable without a global link. Browser installation is still required. Use the same doctor/spec/policy workflow through the installed executable.
+
+Builds after v0.1.0-preview.1 also support `npm exec --offline -- promiseproof demo` to start the packaged fixture. The tagged preview.1 retains the direct fixture command in its release notes; its assets do not change with main-branch development.

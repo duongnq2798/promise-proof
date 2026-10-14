@@ -82,3 +82,18 @@ Fresh agent-client auto-discovery, Claude Code/Cursor invocation, external-user 
 - Fresh npm run check passed typecheck, lint, formatting, 95 tests / 5 files and build; tests took 70.59 seconds. A fresh candidate consumer at `.smoke/package-UMlRB1` passed all installed checks and three real workflows with exits 0/1/0.
 - Read-only independent review found no Critical/Important/Minor issues. Its package dry-run confirmed the necessary runtime/example/docs assets and excluded private runs, .env, caches, node_modules and probe files. Release notes distinguish source test evidence from external-user usability.
 - GitHub private vulnerability reporting was enabled and read back as true. No vulnerability message was sent. Final asset checksum and actual release publication are recorded when performed.
+
+## Published preview.1
+
+- [GitHub v0.1.0-preview.1](https://github.com/duongnq2798/promise-proof/releases/tag/v0.1.0-preview.1) was published as a prerelease at exact commit `4329a4fa22355f3ade974669c28f8e3a924ee541`. All six candidate OS/Node jobs passed in [run 38500300474](https://github.com/duongnq2798/promise-proof/actions/runs/38500300474).
+- The final asset consumer at `.smoke/package-csoHSW` passed the full installed smoke with exits 0/1/0. A separate direct-entrypoint probe started the packaged examples/server.mjs, served the real form over loopback and terminated it afterward.
+- Published assets are `promiseproof-local-0.1.0.tgz` (995060 bytes) and `SHA256SUMS.txt`. SHA-256: `e6f518fe102d28adc37df983052d23f07db62adff42297065d54d29bf8943c17`. Both assets were downloaded again from GitHub and the computed tarball checksum matched the published file. The checksum is transfer/version evidence, not a digital signature.
+- Main-branch work after this tag is separate. Preview.1 retains the direct fixture-start command; its tarball does not contain the new demo CLI.
+
+## Installed demo CLI follow-up
+
+- Six new built-process tests ran assertion RED before implementation and GREEN after it. They cover four invalid ports, an occupied listener that remains intact, real fixture serving on port 0 and port release after termination; startup creates no local policy/evidence files.
+- Fresh npm run check passed typecheck, lint, formatting, **101 tests / 6 files** and build. Tests took 57.58 seconds on Windows. The final source package consumer at `.smoke/package-GrJ8Fb` used the installed demo process for all three real browser workflows and passed with exits 0/1/0.
+- Read-only independent review found no Critical/Important issues. Its Minor about fragmented stdout in the smoke harness was addressed using a complete-line reader, bounded startup and early-close diagnostics. The harness then passed again at `.smoke/package-GCyaXn`, including installed demo, init, doctor, privacy checks, exports, agent export and all three workflows.
+- Independent Windows probes emitted SIGINT/SIGTERM events with a real idle TCP connection and observed socket closure/exit 0. Built-process tests terminate the process and check port release; Unix jobs also assert exit 0. A real Windows keyboard Ctrl+C interaction remains unverified. No external-user feedback or internet-facing bind probe is claimed.
+- The new CLI is main-branch development after preview.1; its own platform CI is recorded after the implementation commit completes.
