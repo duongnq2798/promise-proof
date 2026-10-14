@@ -1,6 +1,16 @@
 # Get your first evidence report
 
-You need Node.js 22.12 or newer, npm and an authorized test application. Installing packages and Chromium requires a network connection; local verification does not require an account or model key.
+You need Node.js 22.12 or newer and npm. Installing packages and Chromium requires a network connection; local verification does not require an account or model key.
+
+## One command: try the bundled example
+
+```sh
+npx @duongnq2798/promiseproof quickstart
+```
+
+This public package prepares Chromium, starts a synthetic loopback app, runs the saved-contact contract and opens its offline report. The sample checks four assertions; it does not verify your own app. The first browser download can take time. Add `--no-open` to print the report path without opening a viewer, or `--example failing-workflow` to see a deliberate persistence FAIL and blocked NOT_VERIFIED with exit 1. See [Quickstart options and limits](quickstart.md).
+
+The source-checkout flow below is optional. For your own app, supply an authorized test origin and acceptance criteria.
 
 [Watch the first-run video](media/first-run.mp4) with visible English captions, or read its [chapters, transcript and commands](video-walkthrough.md). It demonstrates the installed preview.2 workflow and the difference between UI success and independently verified persistence. The [offline player](media/first-run.html) works from the local documentation folder.
 
@@ -16,7 +26,7 @@ npm exec playwright install chromium
 
 On Linux, use `npm exec playwright install --with-deps chromium` if the browser's OS dependencies are missing. Use the Playwright browser installed for this package version.
 
-PromiseProof is not published to npm. Do not run an unqualified public `npx promiseproof` command.
+The public runtime is `@duongnq2798/promiseproof`. Do not substitute an unrelated unqualified `npx promiseproof` command.
 
 ## 2. Start the example application
 

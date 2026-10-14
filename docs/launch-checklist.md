@@ -1,10 +1,10 @@
 # Launch after registry verification
 
-**Current gate:** the candidate passed source/platform/installed-consumer checks, but npm publication requires the owner's authentication. Do not post these drafts until the pinned public package is fetched and exercised successfully. Posting or contacting people remains a separate owner decision.
+**Distribution gate passed:** public npm 0.1.0 was downloaded, matched against the tested bytes, and exercised through npx for genuine PASS and intentional FAIL. These remain drafts; posting or contacting people requires the owner's separate direction. Sponsorship still needs the owner's real Ko-fi link.
 
 ## Launch sequence
 
-1. Complete [npm publication and registry verification](releases/npm-0.1.0.md). Then change candidate wording in README/Quickstart to the verified public version.
+1. Check the [npm release verification](releases/npm-0.1.0.md). README/Quickstart now use the verified public runtime; keep commands pinned when reproducing this version.
 2. Keep the runtime command prominent. Explain that `npx skills add duongnq2798/promise-proof --skill promiseproof` installs agent instructions separately.
 3. Show the deliberately broken form and its actual report: UI success, failed persistence, blocked downstream check.
 4. Use one relevant channel at a time: a repository update, a developer community or an owner-controlled social account. Follow posting rules; do not mass-message people.

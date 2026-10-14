@@ -1,5 +1,9 @@
 # Verification record
 
+Latest distribution evidence: [public registry verification](#public-registry-verification--2026-10-14) confirms the npm 0.1.0 download and real public-command PASS/FAIL. The initial record below and dated follow-ups retain their original scope.
+
+## Initial record — 2026-10-13
+
 Date: 2026-10-13, Asia/Bangkok. Local host: Windows, Node.js 24.12.0. Runner uses Playwright 1.64.0 / Chromium revision 1248. Local commands and the separately observed initial-commit CI run are distinguished below. No npm publication or deployment is claimed.
 
 ## Quality checks
@@ -38,7 +42,7 @@ Final genuine sample runs:
 
 The original bundles remain under .promiseproof/runs. Portable copies are in docs/sample-report/passing, failing and invitation. The passing/failing bundles include context traces; invitation tracing is disabled because its API captures a link. All three include genuine screenshots.
 
-## Remaining unverified boundaries
+## Unverified boundaries at the initial record
 
 Fresh agent-client auto-discovery, Claude Code/Cursor invocation, external-user first-run testing, real email delivery and public registry installation have not been exercised. Public branding/owner/contact decisions remain pending. No output is described as cryptographic proof or production certification.
 
@@ -152,3 +156,12 @@ Fresh agent-client auto-discovery, Claude Code/Cursor invocation, external-user 
 - Integration preserved twelve pending primary-checkout documents. Ten non-overlapping files remained byte-identical; earlier README and verification content were retained with only this feature's sections added. They remain local unstaged/untracked work; they were not blanket-committed. Backups/hashes and candidate evidence are retained under `.smoke/quickstart-integration`.
 - A separate fresh project installed the skill from the actual public GitHub repository with the official skills CLI, project-scoped for Codex. The copied file's SHA-256 matched current source (`4d9581324cb30fe153be23fbadac486e3298b66384adef36bc8c0b51949a75c2`). This confirms public distribution of these instructions, not automatic client activation or public runtime availability.
 - Main's separate [run 38546919687](https://github.com/duongnq2798/promise-proof/actions/runs/38546919687) completed successfully in all six jobs at the same implementation commit. A subsequent public registry query still returned E404 for the scoped 0.1.0 package; the owner-authentication gate remains open. Publication has not been inferred from CI or authenticated account identity.
+
+### Public registry verification — 2026-10-14
+
+- The owner completed the npm authentication and supplied the successful `+ @duongnq2798/promiseproof@0.1.0` result with a registry-processing notice. Anonymous requests still returned 404 during processing; no runtime availability was inferred from upload acceptance alone. The first successful download check was at 10:20:30 UTC (17:20:30 Asia/Bangkok); registry metadata records 0.1.0 at 10:19:08 UTC.
+- Public metadata identifies 0.1.0 as latest. The actual registry tarball was downloaded into `.smoke/registry-confirmation/registry-download.tgz`, verified against registry SHA-512 integrity, and matched the original tested file's SHA-256 `74cba9c6741e6eb01515fa990ae3f274bb1b67cf74cb492296275f591849b00a` exactly: 126971 packed bytes, 72 files, 512839 unpacked bytes. This is byte/integrity comparison; registry signatures were not independently verified.
+- A new consumer project with a separate fresh npm cache ran `npx @duongnq2798/promiseproof quickstart --no-open` (with operational yes/cache flags): PASS/0, four passed assertions; run `saved-contact-2026-10-14T10-21-05-406Z-524c006b`. The pinned public 0.1.0 deliberate defect returned FAIL/1 with 1 PASS, 1 FAIL, 1 NOT_VERIFIED and 0 ERROR; run `lying-form-2026-10-14T10-21-51-685Z-7a6b0612`. Saved results/specs/reports were read, the original persistence expectation was retained, downstream had zero attempts, and both fixture origins were unreachable after exit.
+- Both npx-installed lockfiles resolve the scoped runtime to its HTTPS registry tarball with the exact expected integrity. Reports, original output, exit codes, downloaded bytes and metadata are retained under `.smoke/registry-confirmation`; no source checkout runner or provided-tarball installation substituted for the public commands. Chromium was cached. This is not a new all-OS cold-download/default-viewer test or an external-user study.
+- The pinned public command also exported both specification/policy schemas with exit 0; each output parsed as an object JSON Schema. Copied-skill instructions can use this registry route without checkout-relative files; automatic client activation still was not exercised.
+- README, first-run/Quickstart, distribution architecture, release record and launch checklist now describe the verified public package. These are documentation changes; published runtime bytes and old preview assets are unchanged. Sponsorship still awaits the owner's actual Ko-fi link; no promotional post, message or payment was sent.

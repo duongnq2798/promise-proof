@@ -4,15 +4,15 @@
 
 ## One-command first result
 
-The scoped npm distribution candidate is `@duongnq2798/promiseproof`. After its registry publication is verified, run:
+Requires Node.js 22.12 or newer and npm. Run the public package:
 
 ```sh
 npx @duongnq2798/promiseproof quickstart
 ```
 
-Quickstart prepares matching headless Chromium, starts a synthetic loopback fixture, creates a fresh isolated contract/policy, verifies it and opens the offline report. Cached runs reuse the browser. Try `--example failing-workflow` to see UI PASS, persistence FAIL and dependent NOT_VERIFIED with exit 1. Your existing project files remain untouched; the owned demo stops on completion. This checks the bundled example, not your application. See [Quickstart and candidate installation](docs/quickstart.md).
+Quickstart prepares matching headless Chromium, starts a synthetic loopback fixture, creates a fresh isolated contract/policy, verifies it and opens the offline report. Cached runs reuse the browser. Try `--example failing-workflow` to see UI PASS, persistence FAIL and dependent NOT_VERIFIED with exit 1. Your existing project files remain untouched; the owned demo stops on completion. This checks the bundled example, not your application. See [Quickstart and installation](docs/quickstart.md).
 
-For coding agents, `npx skills add duongnq2798/promise-proof --skill promiseproof` installs instructions; the updated skill needs to be on public main, and its scoped runner must be available separately. The skill can retrieve schemas through the CLI without a checkout. Actual registry/client readiness is recorded separately from source tests.
+For coding agents, `npx skills add duongnq2798/promise-proof --skill promiseproof` installs instructions. The skill uses the scoped runner and retrieves schemas through the CLI without a checkout. Public version 0.1.0 was downloaded and exercised for PASS and intentional FAIL; automatic client skill activation remains untested. See the [release verification](docs/releases/npm-0.1.0.md).
 
 Verify observable software outcomes in a real browser, then review exactly which assertions passed, failed, or lacked evidence. PromiseProof combines UI checks, controlled test API checks and isolated user sessions in a versioned JSON specification. A deterministic runner produces a portable offline evidence report. No SaaS account, hosted database or LLM API key is required.
 
@@ -53,7 +53,7 @@ Expected verification exit codes: **0**, **1**, **0**. The failure is intentiona
 
 Linux installation may require npm exec playwright install --with-deps chromium. The initial commit's [six-job CI run](https://github.com/duongnq2798/promise-proof/actions/runs/38428830158) passed on Windows, Linux and macOS with Node 22/24, including the real examples and packed consumer smoke. Follow-up changes still require their own checks.
 
-Registry availability of the new scoped candidate is verified independently; do not use an unrelated public `npx promiseproof`. The earlier [GitHub releases](https://github.com/duongnq2798/promise-proof/releases) remain installable tarballs named promiseproof-local: preview.2 has [demo and runnable init](docs/releases/v0.1.0-preview.2.md), preview.1 has its [original instructions](docs/releases/v0.1.0-preview.1.md). They do not contain the new quickstart/schema commands. You can also run npm pack in this checkout to create the scoped candidate.
+The public npm package is [@duongnq2798/promiseproof](https://www.npmjs.com/package/@duongnq2798/promiseproof); use that scope rather than an unrelated `npx promiseproof`. The earlier [GitHub releases](https://github.com/duongnq2798/promise-proof/releases) remain installable tarballs named promiseproof-local: preview.2 has [demo and runnable init](docs/releases/v0.1.0-preview.2.md), preview.1 has its [original instructions](docs/releases/v0.1.0-preview.1.md). They do not contain the new quickstart/schema commands. You can also run npm pack in this checkout.
 
 For a runnable synthetic outcome in a fresh project, use `promiseproof init --example simple-form`, then doctor/verify `.promiseproof/example.json` while the bundled demo runs. Other presets are `failing-workflow` and `invitation-flow`. Plain init remains a starter for your own acceptance criteria. Existing files are preserved when switching presets.
 
@@ -167,4 +167,4 @@ npm pack
 
 One inspectable TypeScript package: [spec](src/spec.ts), [security](src/security.ts), [browser](src/browser.ts), [runner](src/runner.ts), [reporter](src/reporter.ts), [CLI](src/cli.ts). See [architecture](ARCHITECTURE.md), [contributing](CONTRIBUTING.md), [verification](docs/verification.md), [security reporting](SECURITY.md) and [MIT license](LICENSE).
 
-An existing independent project already uses PromiseProof. No affiliation is implied. Public naming, ownership and package metadata must be resolved before publication. [Release checklist](docs/release-readiness.md).
+An independent project also uses PromiseProof. No affiliation is implied. This repository distributes the scoped package `@duongnq2798/promiseproof`. [Release checklist](docs/release-readiness.md).

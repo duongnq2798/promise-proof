@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.1.0 — unreleased
+## 0.1.0 — 2026-10-14
 
-- Scoped distribution candidate @duongnq2798/promiseproof with one-command synthetic quickstart, matching headless-browser readiness/download, fresh workspaces, unchanged verdicts and owned-process cleanup. Private downloader output and interruption gates preserve setup/privacy boundaries.
+- Public npm distribution @duongnq2798/promiseproof with one-command synthetic quickstart, matching headless-browser readiness/download, fresh workspaces, unchanged verdicts and owned-process cleanup. Private downloader output and interruption gates preserve setup/privacy boundaries. Registry bytes and actual public-command PASS/FAIL were verified; see docs/releases/npm-0.1.0.md.
 - Checkout-free spec/policy schema export and self-contained agent bootstrap instructions; runtime tarballs omit documentation media/history while retaining the CI recipe.
 
 - Preview.2 follow-up: init --example selects validated runnable synthetic workflows, retains default starter behavior and preserves existing spec/policy files. Installed-package smoke verifies generated templates against the packaged demo.
@@ -26,4 +26,4 @@
 - Initialization, diagnostics, history and agent export CLI.
 - Automated tests, independent review and release preparation.
 
-Source is available at duongnq2798/promise-proof. No npm package has been published and no service deployed. Public package naming and ownership are unresolved.
+Source is available at duongnq2798/promise-proof. The public npm package is @duongnq2798/promiseproof; no hosted service has been deployed. See docs/releases/npm-0.1.0.md for registry and execution evidence.
