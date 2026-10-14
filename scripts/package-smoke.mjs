@@ -153,6 +153,27 @@ try {
           stdout,
       );
     const result = JSON.parse(stdout);
+    let summaryCode = 0;
+    let summaryOutput;
+    try {
+      ({ stdout: summaryOutput } = await command(
+        process.execPath,
+        [cli, 'summary', result.runId],
+        { cwd: workflowDirectory },
+      ));
+    } catch (error) {
+      summaryCode = error.code;
+      summaryOutput = error.stdout;
+    }
+    if (
+      summaryCode !== expectedCode ||
+      !summaryOutput.includes('Recorded outcome: **' + result.status + '**') ||
+      (name === 'failing-workflow' &&
+        !summaryOutput.includes('Blocked by: persisted'))
+    )
+      throw new Error(
+        'Packaged summary did not preserve the run verdict or prerequisites',
+      );
     const html = await readFile(
       path.join(result.directory, 'report.html'),
       'utf8',
@@ -167,6 +188,31 @@ try {
       'Packaged ' + name + ': ' + result.status + ' (exit ' + code + ')',
     );
   }
+  const ciDirectory = path.join(directory, 'failing-workflow');
+  const ciSummaryFile = path.join(directory, 'job-summary.md');
+  let ciCode = 0;
+  try {
+    await command(
+      process.execPath,
+      [path.join(installed, 'docs/ci-run.mjs'), '.promiseproof/example.json'],
+      {
+        cwd: ciDirectory,
+        env: { ...process.env, GITHUB_STEP_SUMMARY: ciSummaryFile },
+      },
+    );
+  } catch (error) {
+    ciCode = error.code;
+  }
+  const ciSummary = await readFile(ciSummaryFile, 'utf8');
+  if (
+    ciCode !== 1 ||
+    !ciSummary.includes('Recorded outcome: **FAIL**') ||
+    !ciSummary.includes('Blocked by: persisted')
+  )
+    throw new Error('Installed CI recipe masked failure or lost its summary');
+  console.log(
+    'Packaged summary/CI recipe: saved statuses preserved; failing job remains exit 1',
+  );
   await command(
     process.execPath,
     [cli, 'agent', '--output', 'PROMISEPROOF-AGENT.md'],

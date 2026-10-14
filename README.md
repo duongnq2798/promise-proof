@@ -104,15 +104,16 @@ Use complete [examples](examples) and the generated [JSON Schema](schema/spec.sc
 
 ## Commands and verdicts
 
-| Command                                         | Purpose                                                          |
-| ----------------------------------------------- | ---------------------------------------------------------------- |
-| init [--base-url URL] [--example NAME]          | Create policy and starter/demo spec; preserve existing files     |
-| demo [--port NUMBER]                            | Run the synthetic loopback fixture; default 4173, 0 picks a port |
-| verify SPEC --config POLICY [--json] [--headed] | Execute a validated specification                                |
-| list --config POLICY                            | List saved run ids                                               |
-| report RUN_ID --config POLICY                   | Print the local HTML report path                                 |
-| doctor --config POLICY [--spec SPEC]            | Check Node, Chromium, policy, credentials and evidence writes    |
-| agent [--output NEW_FILE]                       | Read/export agent instructions without changing agent settings   |
+| Command                                                     | Purpose                                                            |
+| ----------------------------------------------------------- | ------------------------------------------------------------------ |
+| init [--base-url URL] [--example NAME]                      | Create policy and starter/demo spec; preserve existing files       |
+| demo [--port NUMBER]                                        | Run the synthetic loopback fixture; default 4173, 0 picks a port   |
+| verify SPEC --config POLICY [--json] [--headed]             | Execute a validated specification                                  |
+| list --config POLICY                                        | List saved run ids                                                 |
+| report RUN_ID --config POLICY                               | Print the local HTML report path                                   |
+| summary RUN_ID [--config POLICY] [--artifact-url HTTPS_URL] | Print a saved verdict and evidence as Markdown; keep its exit code |
+| doctor --config POLICY [--spec SPEC]                        | Check Node, Chromium, policy, credentials and evidence writes      |
+| agent [--output NEW_FILE]                                   | Read/export agent instructions without changing agent settings     |
 
 Assertions use PASS, FAIL, NOT_VERIFIED, ERROR. Failed actions also prevent overall PASS. Each step depends on its predecessor by default; explicit dependencies point backward. Exit **0** = PASS; **1** = failed/incomplete; **2** = invalid configuration/usage; **3** = runtime/infrastructure error. Errors dominate failures; failures dominate missing evidence.
 
@@ -125,6 +126,12 @@ node dist/cli.js agent --output PROMISEPROOF-AGENT.md
 Ask Codex: “Read PROMISEPROOF-AGENT.md. Verify that a sender can invite a teammate and the recipient gains workspace membership. State boundaries, generate a revisioned spec, run it and inspect the actual result.” The runner makes every verdict. The explicit-file workflow and runner invocation were exercised during this Codex build; export/non-overwrite behavior is automated-tested.
 
 See [agent integrations](docs/agent-integrations.md) for client-specific instructions and untested automatic-discovery boundaries.
+
+## Review outcomes in CI
+
+Current source builds support `promiseproof summary RUN_ID` for a concise Markdown review of a saved run. It preserves FAIL/NOT_VERIFIED/ERROR, shows failed actions and cleanup separately from assertion counts, and identifies blocked prerequisites. An optional `--artifact-url` links to the caller's uploaded evidence artifact. The command summarizes existing observations; it does not rerun or authenticate them.
+
+See [CI review summaries](docs/ci-integration.md) for the copyable consumer recipe and [a genuine failing-run summary](docs/summary-example.md). The recipe retains evidence and verification exit codes, and uses GitHub's job-summary surface. This feature is development after preview.2; preview.2 downloads do not contain it.
 
 ## Why install this instead of writing Playwright directly?
 

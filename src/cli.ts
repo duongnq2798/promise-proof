@@ -9,6 +9,7 @@ import { verify, errorMessage } from './runner.js';
 import { ConfigurationError, parseConfig, parseSpec } from './spec.js';
 import { redact } from './security.js';
 import { exitCode } from './result.js';
+import { parseSavedResult, renderSummary } from './summary.js';
 
 async function readJson(file: string): Promise<unknown> {
   let content: string;
@@ -227,6 +228,32 @@ program
           ? JSON.stringify({ ...result, directory })
           : `${result.status} · ${result.goal}\nAssertions: ${result.summary.PASS} passed, ${result.summary.FAIL} failed, ${result.summary.NOT_VERIFIED} not verified, ${result.summary.ERROR} errors\nReport: ${path.join(directory, 'report.html')}`,
       );
+      process.exitCode = exitCode(result.status);
+    },
+  );
+program
+  .command('summary')
+  .description(
+    'Summarize a saved run as Markdown; exit code reflects its recorded verdict',
+  )
+  .argument('<run-id>', 'A run id from promiseproof list')
+  .option('--config <file>', 'Test policy', configPath)
+  .option(
+    '--artifact-url <url>',
+    'HTTPS link to a downloaded CI evidence artifact',
+  )
+  .action(
+    async (id: string, options: { config: string; artifactUrl?: string }) => {
+      if (!/^[a-zA-Z0-9_-]+$/.test(id))
+        throw new ConfigurationError(
+          'Expected a run id; path traversal is not permitted.',
+        );
+      const config = parseConfig(await readJson(options.config));
+      const result = parseSavedResult(
+        await readJson(path.resolve(config.outputDir, id, 'result.json')),
+        id,
+      );
+      console.log(renderSummary(result, options.artifactUrl));
       process.exitCode = exitCode(result.status);
     },
   );
