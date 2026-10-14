@@ -2,6 +2,8 @@
 
 Requires Node.js 22.12 or newer and npm. This is the scoped distribution candidate; registry publication is verified separately. The existing GitHub preview.2 tarball has neither quickstart nor schema export.
 
+The final candidate passed local and six-platform-job checks; its npm publish attempt requires owner authentication. See the [maintainer release handoff](releases/npm-0.1.0.md). Until registry verification succeeds, use the confirmed candidate tarball route below.
+
 After the scoped package is published and registry availability is confirmed, its entry command is:
 
 ```sh
