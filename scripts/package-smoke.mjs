@@ -43,7 +43,14 @@ await command(
   ],
   { cwd: directory },
 );
-const installed = path.join(directory, 'node_modules/promiseproof-local');
+const packageName = JSON.parse(
+  await readFile(new URL('../package.json', import.meta.url), 'utf8'),
+).name;
+const installed = path.join(
+  directory,
+  'node_modules',
+  ...packageName.split('/'),
+);
 const cli = path.join(installed, 'dist/cli.js');
 const demo = spawn(process.execPath, [cli, 'demo', '--port', '0'], {
   cwd: directory,
@@ -220,9 +227,57 @@ try {
   );
   await writeFile(
     path.join(directory, 'exports-smoke.mjs'),
-    "import { verify, parseSpec, renderReport } from 'promiseproof-local';\nif ([verify, parseSpec, renderReport].some(value => typeof value !== 'function')) throw new Error('Invalid ESM exports');\n",
+    `import { verify, parseSpec, renderReport } from ${JSON.stringify(packageName)};\nif ([verify, parseSpec, renderReport].some(value => typeof value !== 'function')) throw new Error('Invalid ESM exports');\n`,
   );
   await command(process.execPath, ['exports-smoke.mjs'], { cwd: directory });
+  for (const [example, expectedCode] of [
+    ['simple-form', 0],
+    ['failing-workflow', 1],
+  ]) {
+    let quickstartCode = 0;
+    let quickstartOutput;
+    try {
+      ({ stdout: quickstartOutput } = await command(
+        process.execPath,
+        [cli, 'quickstart', '--example', example, '--no-open', '--no-install'],
+        { cwd: directory },
+      ));
+    } catch (error) {
+      quickstartCode = error.code;
+      quickstartOutput = error.stdout;
+    }
+    if (quickstartCode !== expectedCode)
+      throw new Error('Installed quickstart changed the expected exit');
+    const reportLine = quickstartOutput.match(/^Report: (.*)$/m)?.[1];
+    if (!reportLine)
+      throw new Error('Installed quickstart did not retain a report');
+    const reportFile = JSON.parse(reportLine);
+    const saved = JSON.parse(
+      await readFile(
+        path.join(path.dirname(reportFile), 'result.json'),
+        'utf8',
+      ),
+    );
+    if (saved.status !== (expectedCode === 0 ? 'PASS' : 'FAIL'))
+      throw new Error('Installed quickstart verdict mismatch');
+    let reachable = false;
+    try {
+      await fetch(saved.baseUrl);
+      reachable = true;
+    } catch {}
+    if (reachable)
+      throw new Error('Installed quickstart left its demo running');
+  }
+  for (const args of [['schema'], ['schema', '--policy']]) {
+    const { stdout } = await command(process.execPath, [cli, ...args], {
+      cwd: directory,
+    });
+    if (JSON.parse(stdout).type !== 'object')
+      throw new Error('Installed schema export is invalid');
+  }
+  console.log(
+    'Packaged quickstart/schema: genuine PASS/FAIL, stopped demos, checkout-free schema',
+  );
   await readFile(path.join(installed, 'ARCHITECTURE.md'));
   console.log(
     'Package smoke PASS: demo, init examples, private input errors, doctor, exports, agent instructions, three real browser workflows; ' +

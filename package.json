@@ -1,7 +1,10 @@
 {
-  "name": "promiseproof-local",
+  "name": "@duongnq2798/promiseproof",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "AI built it. Prove it works. Local deterministic outcome verification.",
   "type": "module",
   "license": "MIT",

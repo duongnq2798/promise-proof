@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .promiseproof/runs/
+.promiseproof/quickstarts/
 .smoke/
 *.tgz
 .env

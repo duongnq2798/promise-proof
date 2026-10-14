@@ -2,6 +2,9 @@
 
 ## 0.1.0 — unreleased
 
+- Scoped distribution candidate @duongnq2798/promiseproof with one-command synthetic quickstart, matching headless-browser readiness/download, fresh workspaces, unchanged verdicts and owned-process cleanup. Private downloader output and interruption gates preserve setup/privacy boundaries.
+- Checkout-free spec/policy schema export and self-contained agent bootstrap instructions; runtime tarballs omit documentation media/history while retaining the CI recipe.
+
 - Preview.2 follow-up: init --example selects validated runnable synthetic workflows, retains default starter behavior and preserves existing spec/policy files. Installed-package smoke verifies generated templates against the packaged demo.
 
 - Main-branch follow-up after GitHub preview.1: installed demo command with loopback-only synthetic data, port repair hints and process shutdown; package smoke uses that installed fixture.

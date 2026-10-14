@@ -31,4 +31,4 @@ jobs:
           retention-days: 7
           include-hidden-files: true
       - run: npm pack
-      - run: node scripts/package-smoke.mjs promiseproof-local-0.1.0.tgz
+      - run: node scripts/package-smoke.mjs duongnq2798-promiseproof-0.1.0.tgz

@@ -6,10 +6,12 @@ import path from 'node:path';
 import type { Server } from 'node:http';
 import { runDoctor } from './doctor.js';
 import { verify, errorMessage } from './runner.js';
-import { ConfigurationError, parseConfig, parseSpec } from './spec.js';
+import { ConfigurationError, parseConfig } from './spec.js';
 import { redact } from './security.js';
 import { exitCode } from './result.js';
 import { parseSavedResult, renderSummary } from './summary.js';
+import { demoExamples, loadDemoExample, type DemoExample } from './examples.js';
+import { runQuickstart } from './quickstart.js';
 
 async function readJson(file: string): Promise<unknown> {
   let content: string;
@@ -41,6 +43,47 @@ const program = new Command()
   .version('0.1.0')
   .exitOverride();
 const configPath = '.promiseproof/config.json';
+program
+  .command('quickstart')
+  .description(
+    'Run a complete synthetic example; prepare Chromium and open its local report',
+  )
+  .addOption(
+    new Option('--example <name>', 'Synthetic example')
+      .choices([...demoExamples])
+      .default('simple-form'),
+  )
+  .option('--no-install', 'Do not download a missing Chromium browser')
+  .option('--no-open', 'Print the report path without launching a viewer')
+  .action(
+    async (options: {
+      example: DemoExample;
+      install: boolean;
+      open: boolean;
+    }) => {
+      process.exitCode = await runQuickstart(options);
+    },
+  );
+program
+  .command('schema')
+  .description(
+    'Print the bundled JSON Schema without requiring a source checkout',
+  )
+  .option(
+    '--policy',
+    'Print the test-origin policy schema instead of the spec schema',
+  )
+  .action(async (options: { policy?: boolean }) => {
+    console.log(
+      await readFile(
+        new URL(
+          `../schema/${options.policy ? 'config' : 'spec'}.schema.json`,
+          import.meta.url,
+        ),
+        'utf8',
+      ),
+    );
+  });
 program
   .command('demo')
   .description('Run the bundled synthetic test app on loopback only')
@@ -166,21 +209,10 @@ program
       ],
     };
     if (options.example !== 'starter') {
-      const bundled = JSON.parse(
-        await readFile(
-          new URL(`../examples/${options.example}/spec.json`, import.meta.url),
-          'utf8',
-        ),
-      ) as Record<string, unknown>;
-      delete bundled.$schema;
-      const selected = parseSpec({ ...bundled, baseUrl: options.baseUrl });
-      selected.preconditions = selected.preconditions.map((condition) =>
-        condition.replace(
-          'Run npm run demo.',
-          'Run promiseproof demo at the configured base URL.',
-        ),
+      example = await loadDemoExample(
+        options.example as DemoExample,
+        options.baseUrl,
       );
-      example = selected;
     }
     await mkdir('.promiseproof', { recursive: true });
     for (const [file, value] of [

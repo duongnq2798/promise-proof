@@ -22,7 +22,9 @@ async function main() {
     policy = '.promiseproof/config.json',
   ] = process.argv.slice(2);
   const cli = path.join(
-    path.dirname(fileURLToPath(import.meta.resolve('promiseproof-local'))),
+    path.dirname(
+      fileURLToPath(import.meta.resolve('@duongnq2798/promiseproof')),
+    ),
     'cli.js',
   );
   const verification = run(cli, ['verify', spec, '--config', policy, '--json']);

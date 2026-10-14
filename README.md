@@ -2,6 +2,18 @@
 
 **AI built it. Prove it works.**
 
+## One-command first result
+
+The scoped npm distribution candidate is `@duongnq2798/promiseproof`. After its registry publication is verified, run:
+
+```sh
+npx @duongnq2798/promiseproof quickstart
+```
+
+Quickstart prepares matching headless Chromium, starts a synthetic loopback fixture, creates a fresh isolated contract/policy, verifies it and opens the offline report. Cached runs reuse the browser. Try `--example failing-workflow` to see UI PASS, persistence FAIL and dependent NOT_VERIFIED with exit 1. Your existing project files remain untouched; the owned demo stops on completion. This checks the bundled example, not your application. See [Quickstart and candidate installation](docs/quickstart.md).
+
+For coding agents, `npx skills add duongnq2798/promise-proof --skill promiseproof` installs instructions; the updated skill needs to be on public main, and its scoped runner must be available separately. The skill can retrieve schemas through the CLI without a checkout. Actual registry/client readiness is recorded separately from source tests.
+
 Verify observable software outcomes in a real browser, then review exactly which assertions passed, failed, or lacked evidence. PromiseProof combines UI checks, controlled test API checks and isolated user sessions in a versioned JSON specification. A deterministic runner produces a portable offline evidence report. No SaaS account, hosted database or LLM API key is required.
 
 ![Real report from the deliberately broken workflow](docs/report-preview.png)
@@ -41,7 +53,7 @@ Expected verification exit codes: **0**, **1**, **0**. The failure is intentiona
 
 Linux installation may require npm exec playwright install --with-deps chromium. The initial commit's [six-job CI run](https://github.com/duongnq2798/promise-proof/actions/runs/38428830158) passed on Windows, Linux and macOS with Node 22/24, including the real examples and packed consumer smoke. Follow-up changes still require their own checks.
 
-This project is **not published to npm**. Do not use a public npx promiseproof command. Download the installable tarball from [GitHub releases](https://github.com/duongnq2798/promise-proof/releases). Preview.2 supports the [demo and runnable-init quick start](docs/releases/v0.1.0-preview.2.md); preview.1 retains its [original instructions](docs/releases/v0.1.0-preview.1.md). You can also run npm pack in this checkout. The provisional private package name is promiseproof-local.
+Registry availability of the new scoped candidate is verified independently; do not use an unrelated public `npx promiseproof`. The earlier [GitHub releases](https://github.com/duongnq2798/promise-proof/releases) remain installable tarballs named promiseproof-local: preview.2 has [demo and runnable init](docs/releases/v0.1.0-preview.2.md), preview.1 has its [original instructions](docs/releases/v0.1.0-preview.1.md). They do not contain the new quickstart/schema commands. You can also run npm pack in this checkout to create the scoped candidate.
 
 For a runnable synthetic outcome in a fresh project, use `promiseproof init --example simple-form`, then doctor/verify `.promiseproof/example.json` while the bundled demo runs. Other presets are `failing-workflow` and `invitation-flow`. Plain init remains a starter for your own acceptance criteria. Existing files are preserved when switching presets.
 
